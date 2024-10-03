@@ -1,7 +1,10 @@
 // src/ts/components/NowPanelContent.ts
-import { Post, User } from '@types/types';
-import { togglePanel } from '@utils/nowWidgetUtils';
+import { Post, User } from '../types/types';
+import { togglePanel } from '../utils/nowWidgetUtils';
 
+/**
+ * Configuration interface for the panel.
+ */
 interface PanelConfig {
   userId: string;
   token: string;
@@ -9,6 +12,11 @@ interface PanelConfig {
   user: User | null;
 }
 
+/**
+ * Creates the NowWidget side panel.
+ * @param config - Configuration object containing userId, token, posts, and user information.
+ * @returns The NowWidget panel HTMLElement.
+ */
 export const createNowPanel = (config: PanelConfig): HTMLElement => {
   const { userId, token, posts, user } = config;
 
@@ -38,7 +46,7 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
 
   const userName = document.createElement('h2');
   userName.classList.add('now-widget-user-name');
-  userName.textContent = user?.displayName || user?.name || 'Anonymous';
+  userName.textContent = user?.displayName || user?.name;
   userDetails.appendChild(userName);
 
   const userBio = document.createElement('p');
@@ -54,17 +62,20 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   postsContainer.classList.add('now-widget-posts-container');
   panel.appendChild(postsContainer);
 
-  // Render Posts
-  renderPosts(posts, postsContainer);
-
+  document.body.appendChild(panel);
   return panel;
 };
 
-const renderPosts = (posts: Post[], container: HTMLElement): void => {
+/**
+ * Renders posts inside the specified container with hashtag highlighting.
+ * @param posts - Array of Post objects to render.
+ * @param container - The container HTMLElement where posts will be rendered.
+ */
+export const renderPosts = (posts: Post[], container: HTMLElement): void => {
   container.innerHTML = '<h2>Your Posts</h2>';
   posts.forEach(post => {
     const postEl = document.createElement('div');
-    postEl.classList.add('now-widget-post-item');
+    postEl.className = 'now-widget-post-item';
 
     const postContent = document.createElement('p');
     postContent.classList.add('now-widget-post-content');
@@ -82,7 +93,7 @@ const renderPosts = (posts: Post[], container: HTMLElement): void => {
 
       const icon = document.createElement('span');
       icon.classList.add(`icon-${type}`);
-      // Add appropriate icon implementation here
+      // Add appropriate icon implementation here (e.g., SVG or icon font)
       interactionDiv.appendChild(icon);
 
       const count = document.createElement('span');
@@ -97,6 +108,11 @@ const renderPosts = (posts: Post[], container: HTMLElement): void => {
   });
 };
 
+/**
+ * Highlights hashtags in the post content and converts them into clickable links.
+ * @param content - The post content string.
+ * @returns The content string with hashtags highlighted.
+ */
 const highlightHashtags = (content: string): string => {
   return content
     .split(' ')

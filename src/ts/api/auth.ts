@@ -1,6 +1,6 @@
 import { Post, User } from "../types/types";
 
-export const API_BASE_URL = process.env.API_BASE_URL;
+export const API_BASE_URL = process.env.API_BASE_URL || '';
 
 /**
  * Fetches user information.
@@ -10,12 +10,18 @@ export const API_BASE_URL = process.env.API_BASE_URL;
  */
 export const fetchUserInfo = async (userId: string, token: string): Promise<User | null> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/widget/user-info?userId=${userId}`, {
+            method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
+
+        if (response.status === 401) {
+            // Handle token refresh or re-authentication
+            throw new Error('Authentication failed. Please log in again.');
+        }
 
         if (!response.ok) {
             throw new Error(`Failed to fetch user info: ${response.statusText}`);
@@ -30,19 +36,25 @@ export const fetchUserInfo = async (userId: string, token: string): Promise<User
 };
 
 /**
- * Fetches posts created by the user.
+ * Fetches user posts.
  * @param userId - The ID of the user.
  * @param token - The authentication token.
  * @returns A Promise that resolves to an array of Post objects.
  */
 export const fetchUserPosts = async (userId: string, token: string): Promise<Post[]> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/users/${userId}/posts`, {
+        const response = await fetch(`${API_BASE_URL}/api/widget/user-data?userId=${userId}`, {
+            method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
+
+        if (response.status === 401) {
+            // Handle token refresh or re-authentication
+            throw new Error('Authentication failed. Please log in again.');
+        }
 
         if (!response.ok) {
             throw new Error(`Failed to fetch user posts: ${response.statusText}`);

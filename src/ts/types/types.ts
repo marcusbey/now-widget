@@ -1,23 +1,23 @@
 export interface User {
     id: string;
     name: string;
-    displayName: string;
+    displayName?: string;
     email: string;
     emailVerified: boolean;
-    image: string | null;
-    bio: string | null;
-    resendContactId: string | null;
-    widgetToken: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+    image?: string | null;
+    bio?: string | null;
+    resendContactId?: string | null;
+    widgetToken?: string | null;
+    createdAt?: Date;
+    updatedAt?: Date;
     followers: User[];
-    following: User[];
-    posts: Post[];
-    comments: Comment[];
-    likes: Like[];
-    bookmarks: Bookmark[];
-    notifications: Notification[];
-    issuedNotifications: Notification[];
+    following?: User[];
+    posts?: Post[];
+    comments?: Comment[];
+    likes?: Like[];
+    bookmarks?: Bookmark[];
+    notifications?: Notification[];
+    issuedNotifications?: Notification[];
 }
 
 export interface Post {

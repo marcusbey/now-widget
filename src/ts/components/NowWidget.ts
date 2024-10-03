@@ -1,93 +1,57 @@
-"use client";
-
-import { Post, User } from "@/ts/types/types";
+import { fetchUserInfo, fetchUserPosts } from '../api/auth';
+import { setLoading, setPosts, setUser } from '../state/state';
 import {
-  animatePanel,
-  cleanupWidget,
-  initializeWidget,
-} from "@utils/widgetUtils";
+  createButton,
+  createPanel,
+  createWidgetContainer,
+  handleError,
+  setButtonStyles
+} from '../utils/nowWidgetUtils';
+import { applyTheme, setPosition } from '../utils/styleUtils';
 
+/**
+ * Configuration interface for initializing the widget.
+ */
 interface WidgetConfig {
   userId: string;
   token: string;
-  theme?: "light" | "dark";
-  position?: "left" | "right";
+  theme?: string;
+  position?: string;
   buttonColor?: string;
   buttonSize?: number;
-  pathname?: string; // Optional pathname prop for testing purposes
 }
 
-const NowWidget = (config: WidgetConfig): void => {
-  const {
-    userId,
-    token,
-    theme = "light",
-    position = "left",
-    buttonColor = "red",
-    buttonSize = 150,
-    pathname = window.location.pathname,
-  } = config;
+/**
+ * Initializes the NowWidget by creating UI components and fetching user data.
+ * @param config - Configuration object containing userId, token, theme, position, buttonColor, and buttonSize.
+ */
+export const initializeNowWidget = async (config: WidgetConfig): Promise<void> => {
+  const { userId, token, theme, position, buttonColor = '#007bff', buttonSize = 60 } = config;
 
-  let isOpen = false;
-  let posts: Post[] = [];
-  let user: User | null = null;
-  let isLoading = false;
-  let error: string | null = null;
+  // Create widget container
+  createWidgetContainer();
 
-  // Initialize Widget
-  initializeWidget({
-    setIsOpen: (open: boolean) => {
-      isOpen = open;
-      animatePanel(isOpen, position);
-    },
-    theme,
-    position,
-    buttonColor,
-    buttonSize,
-    posts,
-    user,
-    isLoading,
-    error,
-  });
+  // Create and style NowButton
+  const button = createButton(() => togglePanel(true), color || '#007bff', buttonSize);
+  setButtonStyles(button, buttonColor, buttonSize);
 
-  // Fetch Data
-  const fetchData = async () => {
-    isLoading = true;
-    try {
-      const response = await fetch(
-        `${process.env.API_BASE_URL}/api/widget/user-data?userId=${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  // Create and append panel
+  createPanel({ userId, token, posts: [], user: null });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  // Fetch and render data
+  setLoading(true);
+  try {
+    const posts = await fetchUserPosts(userId, token);
+    const user = await fetchUserInfo(userId, token);
+    setPosts(posts);
+    setUser(user);
+  } catch (error: any) {
+    handleError(error.message);
+  } finally {
+    setLoading(false);
+  }
 
-      const data = await response.json();
-
-      if (data.success) {
-        posts = data.data.recentPosts;
-        user = data.data.user;
-      } else {
-        throw new Error(data.error || "Failed to fetch data");
-      }
-    } catch (err) {
-      error = err instanceof Error ? err.message : "An unexpected error occurred";
-    } finally {
-      isLoading = false;
-    }
-  };
-
-  fetchData();
-
-  // Cleanup on widget removal
-  window.addEventListener("beforeunload", () => {
-    cleanupWidget();
-  });
+  // Apply theme and position settings
+  applyTheme(theme);
+  setPosition(position);
 };
-
-export default NowWidget;
