@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/ts/index.ts',
+  entry: './src/index.ts',
   module: {
     rules: [
       {
@@ -16,10 +16,16 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js', '.json'],
+    alias: {
+      '@api': path.resolve(__dirname, 'src/ts/api/'),
+      '@components': path.resolve(__dirname, 'src/ts/components/'),
+      '@utils': path.resolve(__dirname, 'src/ts/utils/'),
+      '@types': path.resolve(__dirname, 'src/ts/types/'),
+    },
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'now-bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {

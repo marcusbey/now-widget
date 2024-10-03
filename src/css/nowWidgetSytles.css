@@ -1,0 +1,74 @@
+#now-widget-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+#now-widget-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  font-size: 24px;
+}
+#now-widget-panel {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+}
+#now-widget-panel.open {
+  right: 0;
+}
+#now-widget-panel h2 {
+  margin-top: 0;
+}
+#now-widget-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.text-ring {
+  animation: spin 60s linear infinite;
+}
+
+.text-ring.slow-spin {
+  animation-duration: 30s;
+}
+
+.text-ring.fast-spin {
+  animation-duration: 5s;
+}
+
+/* Side Panel Slide Animation */
+.now-widget-panel {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%);
+}
+
+.now-widget-panel.open {
+  transform: translateX(0);
+}
