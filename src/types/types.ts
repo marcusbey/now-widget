@@ -10,7 +10,7 @@ export interface User {
     widgetToken?: string | null;
     createdAt?: Date;
     updatedAt?: Date;
-    followers: User[];
+    followers: number;
     following?: User[];
     posts?: Post[];
     comments?: Comment[];
@@ -23,16 +23,16 @@ export interface User {
 export interface Post {
     id: string;
     user: User;
-    attachments: Attachment[];
-    likes: Like[];
-    bookmarks: Bookmark[];
-    comments: Comment[];
-    linkedNotifications: Notification[];
-    content: string; // Added missing 'content' property
+    attachments?: Attachment[];
+    likes?: Like[];
+    bookmarks?: Bookmark[];
+    comments?: Comment[];
+    linkedNotifications?: Notification[];
+    content: string;
     _count: {
-        likes: number;
         comments: number;
         bookmarks: number;
+        likes: number;
     };
 }
 

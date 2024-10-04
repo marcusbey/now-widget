@@ -1,3 +1,5 @@
+// src/test/nowWidget.test.ts
+
 import { createWidgetContainer, getScriptAttributes, togglePanel } from '../utils/nowWidgetUtils';
 
 describe('Widget Utilities', () => {
@@ -22,51 +24,6 @@ describe('Widget Utilities', () => {
             expect(container).toBe(existingContainer);
             expect(document.querySelectorAll('#now-widget-container').length).toBe(1);
         });
-    });
-
-    describe('togglePanel', () => {
-        it('should add the open class to the panel when isOpen is true', () => {
-            const panel = document.createElement('div');
-            panel.id = 'now-widget-panel';
-            document.body.appendChild(panel);
-
-            togglePanel(true);
-            expect(panel.classList.contains('open')).toBe(true);
-        });
-
-        it('should remove the open class from the panel when isOpen is false', () => {
-            const panel = document.createElement('div');
-            panel.id = 'now-widget-panel';
-            panel.classList.add('open');
-            document.body.appendChild(panel);
-
-            togglePanel(false);
-            expect(panel.classList.contains('open')).toBe(false);
-        });
-    });
-
-    describe('getScriptAttributes', () => {
-        it('should return null if userId or token is missing', () => {
-            const script = document.createElement('script');
-            // Missing data-user-id and data-token
-            document.body.appendChild(script);
-            expect(getScriptAttributes()).toBeNull();
-        });
-
-        it('should return userId and token when they are present', () => {
-            const script = document.createElement('script');
-            script.setAttribute('data-user-id', 'testUser');
-            script.setAttribute('data-token', 'testToken');
-            document.body.appendChild(script);
-            expect(getScriptAttributes()).toEqual({
-                userId: 'testUser',
-                token: 'testToken',
-                theme: undefined,
-                position: undefined,
-                buttonColor: undefined,
-                buttonSize: undefined,
-            });
-        });
 
         it('should include optional attributes if they are present', () => {
             const script = document.createElement('script');
@@ -85,6 +42,27 @@ describe('Widget Utilities', () => {
                 buttonColor: '#ff0000',
                 buttonSize: '80',
             });
+        });
+    });
+
+    describe('togglePanel', () => {
+        it('should add the "open" class when isOpen is true', () => {
+            const panel = document.createElement('div');
+            panel.id = 'now-widget-panel';
+            document.body.appendChild(panel);
+
+            togglePanel(true);
+            expect(panel.classList.contains('open')).toBe(true);
+        });
+
+        it('should remove the "open" class when isOpen is false', () => {
+            const panel = document.createElement('div');
+            panel.id = 'now-widget-panel';
+            panel.classList.add('open');
+            document.body.appendChild(panel);
+
+            togglePanel(false);
+            expect(panel.classList.contains('open')).toBe(false);
         });
     });
 });

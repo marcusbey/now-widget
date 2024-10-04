@@ -1,4 +1,11 @@
 // src/ts/components/NowButton.ts
+interface ButtonOptions {
+  color: string;
+  size: number;
+  backgroundColor: string;
+}
+
+type ClickHandler = () => void;
 
 /**
  * Adjusts the spin speed of the text ring based on proximity and hover state.
@@ -40,35 +47,19 @@ export const createNowButton = (
 
   const button = document.createElement('button');
   button.id = 'now-widget-button';
-  button.classList.add('now-widget-button');
-  button.style.backgroundColor = color;
-  button.style.width = `${size}px`;
-  button.style.height = `${size}px`;
+  button.style.backgroundColor = options.backgroundColor;
+  button.style.width = `${options.size}px`;
+  button.style.height = `${options.size}px`;
   button.style.border = 'none';
   button.style.borderRadius = '50%';
-  button.style.cursor = 'pointer';
-  button.style.fontSize = '24px';
-  button.style.color = '#ffffff';
-  button.style.position = 'relative';
-  button.style.overflow = 'hidden';
+  button.style.backgroundColor = options.color;
+  button.addEventListener('click', onClick);
 
-  // Create content container
   const content = document.createElement('div');
-  content.style.position = 'relative';
-  content.style.width = '100%';
-  content.style.height = '100%';
-  content.style.display = 'flex';
-  content.style.justifyContent = 'center';
-  content.style.alignItems = 'center';
+  content.classList.add('now-widget-button-content');
 
-  // Create rotating text ring
-  const textRing = document.createElement('span');
+  const textRing = document.createElement('div');
   textRing.classList.add('text-ring');
-  textRing.style.position = 'absolute';
-  textRing.style.top = '0';
-  textRing.style.left = '0';
-  textRing.style.width = '100%';
-  textRing.style.height = '100%';
 
   const nowText = "NOW.NOW.NOW.NOW.NOW.NOW.";
   nowText.split("").forEach((char, index) => {

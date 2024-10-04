@@ -1,4 +1,5 @@
-import { adjustSpinSpeed, togglePanel } from './nowWidgetUtils';
+import { adjustSpinSpeed } from '../components/NowButton';
+import { togglePanel } from './nowWidgetUtils';
 
 /**
  * Handles the scroll event to hide or show the NowWidget button.

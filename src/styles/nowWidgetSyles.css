@@ -1,3 +1,5 @@
+/* src/styles/nowWidgetStyles.css */
+
 /* NowWidget Styles */
 
 :root {
@@ -43,24 +45,22 @@
   background-color: var(--theme-background);
   color: var(--theme-color);
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease-in-out;
-  overflow-y: auto;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
 }
 
 .now-widget-panel.open {
-  transform: translateX(-300px);
+  right: 0;
 }
 
-#now-widget-close {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+.now-widget-close {
+  align-self: flex-end;
   background: none;
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: var(--theme-color);
 }
 
 .now-widget-user-info {
@@ -88,51 +88,46 @@
 .now-widget-user-bio {
   margin: 5px 0 0 0;
   font-size: 0.9rem;
+  color: gray;
 }
 
-.now-widget-posts-container {
-  margin-top: 20px;
+.now-widget-post {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
 }
 
-.now-widget-post-item {
-  margin-bottom: 15px;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+.now-widget-post h3 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
 }
 
-.now-widget-post-content {
-  margin: 5px 0;
+.now-widget-post p {
+  margin: 0;
+  font-size: 0.9rem;
 }
 
-.now-widget-post-footer {
-  display: flex;
-  gap: 10px;
-}
-
-.now-widget-post-interaction {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.now-widget-hashtag a {
-  color: var(--button-color);
-  text-decoration: none;
-}
-
-.now-widget-hashtag a:hover {
-  text-decoration: underline;
-}
-
-.now-widget-loading,
-.now-widget-error {
-  padding: 20px;
-  text-align: center;
-  font-size: 16px;
+.now-widget-hidden {
+  display: none;
 }
 
 .hidden {
   display: none;
+}
+
+.now-widget-loading {
+  display: block;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1rem;
+  color: gray;
+}
+
+.now-widget-error {
+  display: block;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1rem;
+  color: red;
 }
 
 /* Animations */
@@ -173,4 +168,32 @@
     right: 10px;
     left: auto;
   }
+}
+
+/* Hashtag Styling */
+.now-widget-hashtag a {
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+.now-widget-hashtag a:hover {
+  text-decoration: underline;
+}
+
+/* Button Content Styling */
+.now-widget-button-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.text-ring {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.now-text {
+  display: block;
+  pointer-events: none;
 }

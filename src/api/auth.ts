@@ -1,6 +1,6 @@
 import { Post, User } from "../types/types";
 
-export const API_BASE_URL = process.env.API_BASE_URL || '';
+export const API_BASE_URL = 'https://localhost:3000'; // Replace with your actual API base URL
 
 /**
  * Fetches user information.
@@ -43,7 +43,7 @@ export const fetchUserInfo = async (userId: string, token: string): Promise<User
  */
 export const fetchUserPosts = async (userId: string, token: string): Promise<Post[]> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/widget/user-data?userId=${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}/posts`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -57,7 +57,7 @@ export const fetchUserPosts = async (userId: string, token: string): Promise<Pos
         }
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch user posts: ${response.statusText}`);
+            throw new Error(`Failed to fetch posts: ${response.statusText}`);
         }
 
         const data = await response.json();

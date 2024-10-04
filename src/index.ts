@@ -1,6 +1,5 @@
 import { initializeNowWidget } from './components/NowWidget';
-import './styles/nowWidgetStyles.css'; // Ensure CSS is bundled appropriately
-import { addEventListeners } from './utils/nowEventHandlers';
+import './styles/nowWidgetStyles.css';
 import { getScriptAttributes } from './utils/nowWidgetUtils';
 
 /**
@@ -20,9 +19,6 @@ const init = async (): Promise<void> => {
         buttonColor,
         buttonSize: buttonSize ? parseInt(buttonSize) : undefined,
     });
-
-    // Add Event Listeners after widget initialization
-    addEventListeners();
 };
 
 // Initialize the widget when the DOM is fully loaded

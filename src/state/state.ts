@@ -1,5 +1,5 @@
 import { Post, User } from '../types/types';
-import { renderPosts } from '../utils/nowWidgetUtils';
+import { renderPosts, renderUserInfo } from '../utils/nowWidgetUtils';
 
 export interface WidgetState {
     isPanelOpen: boolean;
@@ -52,24 +52,8 @@ const updateUI = () => {
             displayError(panel, widgetState.error);
         } else {
             hideError(panel);
-        }
-
-        // Update posts and user info
-        const postsContainer = panel.querySelector('.now-widget-posts-container') as HTMLElement;
-        if (postsContainer) {
-            renderPosts(widgetState.posts, postsContainer);
-        }
-
-        // Update user info if applicable
-        const userInfo = panel.querySelector('.now-widget-user-info') as HTMLElement;
-        if (userInfo && widgetState.user) {
-            userInfo.innerHTML = `
-                <img src="${widgetState.user.image || '/placeholder-user.jpg'}" alt="${widgetState.user.displayName || widgetState.user.name}" class="now-widget-avatar">
-                <div class="now-widget-user-details">
-                    <h2 class="now-widget-user-name">${widgetState.user.displayName || widgetState.user.name}</h2>
-                    <p class="now-widget-user-bio">${widgetState.user.bio || ''}</p>
-                </div>
-            `;
+            renderUserInfo(widgetState.user, panel);
+            renderPosts(widgetState.posts, panel);
         }
     }
 };
