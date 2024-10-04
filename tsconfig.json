@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./src",
+    "skipLibCheck": true,
     "paths": {
       "@api/*": ["ts/api/*"],
       "@components/*": ["ts/components/*"],

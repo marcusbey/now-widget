@@ -27,9 +27,23 @@ module.exports = {
   output: {
     filename: 'now-bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   devServer: {
-    static: './public',
-    port: 8080,
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 9000,
+    headers: {
+      'Access-Control-Allow-Origin': 'http://127.0.0.1:8081',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+    open: false,
   },
+  mode: 'development',
 };

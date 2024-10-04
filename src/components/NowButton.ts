@@ -47,12 +47,12 @@ export const createNowButton = (
 
   const button = document.createElement('button');
   button.id = 'now-widget-button';
-  button.style.backgroundColor = options.backgroundColor;
-  button.style.width = `${options.size}px`;
-  button.style.height = `${options.size}px`;
+  button.style.backgroundColor = backgroundColor;
+  button.style.width = `${size}px`;
+  button.style.height = `${size}px`;
   button.style.border = 'none';
   button.style.borderRadius = '50%';
-  button.style.backgroundColor = options.color;
+  button.style.backgroundColor = color;
   button.addEventListener('click', onClick);
 
   const content = document.createElement('div');
