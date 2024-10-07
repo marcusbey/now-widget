@@ -35,8 +35,9 @@
 /* Button Styles */
 #now-widget-container {
   position: fixed;
-  top: 50%;
-  right: 20px; /* Adjust as needed (left or right) */
+  height: 100vh;
+  min-width: 30vw;
+  top: 50%; /* Adjust as needed (left or right) */
   transform: translateY(-50%);
   z-index: 10000; /* High z-index to overlay most elements */
 }

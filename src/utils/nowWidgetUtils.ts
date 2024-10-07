@@ -81,7 +81,6 @@ export const togglePanel = (isOpen: boolean, root: Element): void => {
         } else {
             panel.classList.remove('open');
         }
-
         // Removed margin adjustments to maintain independence as per earlier decisions
     } else {
         console.error('Panel element not found');
