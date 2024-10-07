@@ -48,6 +48,7 @@ export const fetchUserPosts = async (userId: string, token: string): Promise<Pos
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
+            // Do not include 'mode: no-cors'
         });
 
         if (response.status === 401) {
