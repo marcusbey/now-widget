@@ -58,7 +58,7 @@ export const getScriptAttributes = (): {
  * @returns The widget container HTMLElement.
  */
 export const createWidgetContainer = (): HTMLElement => {
-    let container = document.getElementById('now-widget-container');
+    let container = document.getElementById('now-widget-container') as HTMLElement;
     if (!container) {
         container = document.createElement('div');
         container.id = 'now-widget-container';
@@ -70,15 +70,21 @@ export const createWidgetContainer = (): HTMLElement => {
 /**
  * Toggles the visibility of the NowWidget side panel.
  * @param isOpen - Boolean indicating whether to open or close the panel.
+ * @param root - The root Element containing the panel.
  */
-export const togglePanel = (isOpen: boolean): void => {
-    const panel = document.getElementById('now-widget-panel');
+export const togglePanel = (isOpen: boolean, root: Element): void => {
+    const panel = root.querySelector('#now-widget-panel') as HTMLElement | null;
+
     if (panel) {
         if (isOpen) {
             panel.classList.add('open');
         } else {
             panel.classList.remove('open');
         }
+
+        // Removed margin adjustments to maintain independence as per earlier decisions
+    } else {
+        console.error('Panel element not found');
     }
 };
 
@@ -138,4 +144,53 @@ export const displayError = (error: string): void => {
  */
 export const handleError = (error: string): void => {
     setError(error);
+};
+
+export const createShadowContainer = (): ShadowRoot => {
+    const container = document.createElement('div');
+    const shadow = container.attachShadow({ mode: 'open' });
+    document.body.appendChild(container);
+    return shadow;
+};
+
+export const wrapHostContent = (): void => {
+    const body = document.body;
+    const wrapper = document.createElement('div');
+    wrapper.id = 'now-widget-host-content';
+
+    // Move existing body children into the wrapper
+    while (body.firstChild) {
+        wrapper.appendChild(body.firstChild);
+    }
+
+    body.appendChild(wrapper);
+};
+
+export const injectGlobalStyles = (): void => {
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Host content container */
+        #now-widget-host-content {
+            transition: margin-left 0.3s ease;
+        }
+
+        /* When panel is open, push content to the right */
+        #now-widget-host-content.panel-open {
+            margin-left: 30vw;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            #now-widget-host-content.panel-open {
+                margin-left: 50vw;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #now-widget-host-content.panel-open {
+                margin-left: 80vw;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 };

@@ -1,11 +1,13 @@
-// src/ts/components/NowButton.ts
-interface ButtonOptions {
-  color: string;
-  size: number;
-  backgroundColor: string;
-}
+// src/components/NowButton.ts
 
-type ClickHandler = () => void;
+/**
+ * Interface for button options
+ */
+interface ButtonOptions {
+  color?: string;
+  size?: number;
+  backgroundColor?: string;
+}
 
 /**
  * Adjusts the spin speed of the text ring based on proximity and hover state.
@@ -32,28 +34,28 @@ export const adjustSpinSpeed = (
 /**
  * Creates the NowWidget button element.
  * @param onClick - Callback function to execute on button click.
- * @param config - Configuration object containing button color and size.
+ * @param options - Configuration object containing button color, size, and background color.
  * @returns The NowWidget button HTMLElement.
  */
 export const createNowButton = (
   onClick: () => void,
-  config: {
-    color?: string;
-    size?: number;
-    backgroundColor?: string;
-  } = {}
+  options: ButtonOptions = {}
 ): HTMLElement => {
-  const { color = '#007bff', size = 60, backgroundColor = 'transparent' } = config;
+  const { color = '#007bff', size = 50, backgroundColor = 'transparent' } = options;
 
   const button = document.createElement('button');
   button.id = 'now-widget-button';
+  button.type = 'button';
+
+  // Apply styles
   button.style.backgroundColor = backgroundColor;
+  button.style.border = 'none';
+  button.style.cursor = 'pointer';
+
+  // Set button size
   button.style.width = `${size}px`;
   button.style.height = `${size}px`;
-  button.style.border = 'none';
   button.style.borderRadius = '50%';
-  button.style.backgroundColor = color;
-  button.addEventListener('click', onClick);
 
   const content = document.createElement('div');
   content.classList.add('now-widget-button-content');
@@ -99,7 +101,10 @@ export const createNowButton = (
   });
 
   // Click event
-  button.addEventListener('click', onClick);
+  button.addEventListener('click', () => {
+    console.log('NowButton clicked');
+    onClick();
+  });
 
   return button;
 };

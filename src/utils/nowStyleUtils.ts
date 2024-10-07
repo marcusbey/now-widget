@@ -3,8 +3,9 @@
  * @param theme - The theme to apply ('light' or 'dark').
  */
 export const applyTheme = (theme?: string): void => {
-    const panel = document.getElementById('now-widget-panel');
-    if (panel) {
+    const panels = document.getElementsByClassName('now-widget-panel');
+    if (panels.length > 0) {
+        const panel = panels[0] as HTMLElement;
         if (theme === 'dark') {
             panel.classList.add('dark-theme');
         } else {
@@ -18,8 +19,9 @@ export const applyTheme = (theme?: string): void => {
  * @param position - The position to set ('left' or 'right').
  */
 export const setPosition = (position?: string): void => {
-    const container = document.getElementById('now-widget-container');
-    if (container) {
+    const containers = document.getElementsByClassName('now-widget-panel');
+    if (containers.length > 0) {
+        const container = containers[0] as HTMLElement;
         if (position === 'left') {
             container.style.right = 'auto';
             container.style.left = '20px';

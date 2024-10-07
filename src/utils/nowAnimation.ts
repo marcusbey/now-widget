@@ -1,19 +1,13 @@
-// src/utils/animation.ts
+// src/utils/nowAnimation.ts
 
 let animationFrameId: number;
 
 /**
  * Animates the widget by performing animation-related updates.
- * This is a placeholder for actual animation logic.
  */
-export const animate = (): void => {
-    // Example: Rotate a specific element or update animations
-    // const rotatingElement = document.querySelector('.some-rotating-element');
-    // if (rotatingElement) {
-    //     // Update rotation or other properties
-    // }
-
-    // Continue the animation loop
+const animate = (): void => {
+    // Perform animation-related updates
+    // For example, update positions, opacity, or apply CSS classes
     animationFrameId = requestAnimationFrame(animate);
 };
 
@@ -29,4 +23,20 @@ export const startAnimation = (): void => {
  */
 export const stopAnimation = (): void => {
     cancelAnimationFrame(animationFrameId);
+};
+
+export const adjustSpinSpeed = (
+    isNear: boolean,
+    isHovered: boolean,
+    textRing: HTMLElement
+): void => {
+    if (isHovered) {
+        textRing.classList.add('fast-spin');
+        textRing.classList.remove('slow-spin');
+    } else if (isNear) {
+        textRing.classList.add('slow-spin');
+        textRing.classList.remove('fast-spin');
+    } else {
+        textRing.classList.remove('slow-spin', 'fast-spin');
+    }
 };

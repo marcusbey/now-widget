@@ -1,6 +1,12 @@
 import { Post, User } from '../types/types';
 import { renderPosts, renderUserInfo } from '../utils/nowWidgetUtils';
 
+let widgetRoot: Document | ShadowRoot;
+
+export const initializeWidgetRoot = (root: Document | ShadowRoot) => {
+    widgetRoot = root;
+};
+
 export interface WidgetState {
     isPanelOpen: boolean;
     isLoading: boolean;
@@ -18,8 +24,16 @@ export const widgetState: WidgetState = {
 };
 
 // Update functions
-export const setLoading = (isLoading: boolean) => {
+export const setLoading = (isLoading: boolean): void => {
     widgetState.isLoading = isLoading;
+    const panel = widgetRoot.getElementById('now-widget-panel');
+    if (panel) {
+        if (isLoading) {
+            panel.classList.add('loading');
+        } else {
+            panel.classList.remove('loading');
+        }
+    }
     updateUI();
 };
 
@@ -40,7 +54,12 @@ export const setUser = (user: User | null) => {
 
 // UI Update function
 const updateUI = () => {
-    const panel = document.getElementById('now-widget-panel');
+    console.log('updating UI')
+    if (!widgetRoot) {
+        console.error('Widget root is not initialized.');
+        return;
+    }
+    const panel = widgetRoot.getElementById('now-widget-panel');
     if (panel) {
         if (widgetState.isLoading) {
             showLoading(panel);

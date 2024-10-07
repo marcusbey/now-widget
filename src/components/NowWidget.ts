@@ -2,17 +2,17 @@
 
 import { fetchUserInfo, fetchUserPosts } from '../api/auth';
 import { setLoading, setPosts, setUser } from '../state/state';
-import { startAnimation } from '../utils/nowAnimation';
+import styles from '../styles/nowWidgetStyles.css';
 import { addEventListeners } from '../utils/nowEventHandlers';
 import { applyTheme, setPosition } from '../utils/nowStyleUtils';
 import {
   createWidgetContainer,
-  handleError, togglePanel
+  handleError,
+  injectGlobalStyles,
+  togglePanel
 } from '../utils/nowWidgetUtils';
 import { createNowButton } from './NowButton';
-import { createNowPanel } from './NowPanelContent';
-// Import the CSS styles
-import styles from '../styles/nowWidgetStyles.css';
+import { createNowPanel, updateNowPanel } from './NowPanelContent';
 
 /**
  * Configuration interface for initializing the widget.
@@ -31,63 +31,64 @@ interface WidgetConfig {
  * @param config - Configuration object containing userId, token, theme, position, buttonColor, and buttonSize.
  */
 export const initializeNowWidget = async (config: WidgetConfig): Promise<void> => {
-  const { userId, token, theme, position, buttonColor = '#007bff', buttonSize = 60 } = config;
+  // Inject global styles
+  injectGlobalStyles();
 
-  // Create widget container
+  // Create widget container and append to body
   const container = createWidgetContainer();
 
-  // Create Shadow DOM container for encapsulation
-  const shadow = container.attachShadow({ mode: 'open' });
+  // Check if current URL is '/'
+  // if (window.location.pathname !== '/') {
+  //   console.log('NowWidget is only displayed on the root URL.');
+  //   return;
+  // }
 
-  // Create and append NowButton
-  const button = createNowButton(() => togglePanel(true), {
-    color: buttonColor,
-    size: buttonSize,
+  // Create and append NowButton with updated onClick handler
+  const button = createNowButton(() => togglePanel(true, container), {
+    color: config.buttonColor || '#007bff',
+    size: config.buttonSize || 60,
     backgroundColor: 'transparent',
   });
-  shadow.appendChild(button);
 
-  // Create and append Panel
-  const panel = createNowPanel({ userId, token, posts: [], user: null });
-  shadow.appendChild(panel);
+  container.appendChild(button);
 
-  // Append styles to Shadow DOM
+  // Create the panel once
+  const panel = createNowPanel({ userId: config.userId, token: config.token, posts: [], user: null });
+  container.appendChild(panel);
+
+  // Append styles to the widget container
   const style = document.createElement('style');
   style.textContent = styles; // Use the imported CSS content
-  shadow.appendChild(style);
-
-  // Start animation loop
-  startAnimation();
-
-  // Add Event Listeners
-  addEventListeners();
+  container.appendChild(style);
+  console.log('Styles appended to widget container');
 
   // Show loading indicator
-  setLoading(true);
+  setLoading(true); // Assuming setLoading accepts (panel: HTMLElement, isLoading: boolean)
 
   try {
     // Fetch user data
     const [posts, user] = await Promise.all([
-      fetchUserPosts(userId, token),
-      fetchUserInfo(userId, token),
+      fetchUserPosts(config.userId, config.token),
+      fetchUserInfo(config.userId, config.token),
     ]);
-
+    console.log(posts)
     // Update state
     setPosts(posts);
     setUser(user);
 
-    // Update panel content based on fetched data
-    panel.innerHTML = ''; // Clear existing content
-    const updatedPanel = createNowPanel({ userId, token, posts, user });
-    shadow.appendChild(updatedPanel);
+    // Update the existing panel with fetched data
+    updateNowPanel(panel, { userId: config.userId, token: config.token, posts, user });
 
   } catch (error: any) {
     handleError(error.message);
   } finally {
-    setLoading(false);
+    setLoading(false); // Corrected to pass boolean as second argument
   }
 
   // Apply theme and position settings
-  applyTheme(theme);
-  setPosition(position);
+  applyTheme(config.theme);
+  setPosition(config.position);
+
+  // Add Event Listeners
+  addEventListeners(container);
 };

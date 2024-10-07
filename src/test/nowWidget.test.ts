@@ -51,7 +51,11 @@ describe('Widget Utilities', () => {
             panel.id = 'now-widget-panel';
             document.body.appendChild(panel);
 
-            togglePanel(true);
+            // Create a container element to pass to togglePanel
+            const container = document.createElement('div');
+            container.appendChild(panel);
+
+            togglePanel(true, container);
             expect(panel.classList.contains('open')).toBe(true);
         });
 
@@ -61,7 +65,11 @@ describe('Widget Utilities', () => {
             panel.classList.add('open');
             document.body.appendChild(panel);
 
-            togglePanel(false);
+            // Create a container element to pass to togglePanel
+            const container = document.createElement('div');
+            container.appendChild(panel);
+
+            togglePanel(false, container);
             expect(panel.classList.contains('open')).toBe(false);
         });
     });
