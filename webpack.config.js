@@ -10,8 +10,8 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/i,
+        use: ['to-string-loader', 'css-loader'],
       },
     ],
   },
@@ -43,7 +43,6 @@ module.exports = {
     proxy: {
       '/api': 'http://localhost:3000',
     },
-    open: false,
   },
   mode: 'development',
 };

@@ -1,6 +1,6 @@
 import { Post, User } from "../types/types";
 
-export const API_BASE_URL = 'https://localhost:3000'; // Replace with your actual API base URL
+export const API_BASE_URL = 'http://localhost:3000'; // Use HTTPS in production
 
 /**
  * Fetches user information.
@@ -19,8 +19,7 @@ export const fetchUserInfo = async (userId: string, token: string): Promise<User
         });
 
         if (response.status === 401) {
-            // Handle token refresh or re-authentication
-            throw new Error('Authentication failed. Please log in again.');
+            throw new Error('Authentication failed. Please check your token.');
         }
 
         if (!response.ok) {
@@ -43,7 +42,7 @@ export const fetchUserInfo = async (userId: string, token: string): Promise<User
  */
 export const fetchUserPosts = async (userId: string, token: string): Promise<Post[]> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/users/${userId}/posts`, {
+        const response = await fetch(`${API_BASE_URL}/api/widget/user-posts?userId=${userId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -52,8 +51,7 @@ export const fetchUserPosts = async (userId: string, token: string): Promise<Pos
         });
 
         if (response.status === 401) {
-            // Handle token refresh or re-authentication
-            throw new Error('Authentication failed. Please log in again.');
+            throw new Error('Authentication failed. Please check your token.');
         }
 
         if (!response.ok) {

@@ -11,6 +11,9 @@ import {
 } from '../utils/nowWidgetUtils';
 import { createNowButton } from './NowButton';
 import { createNowPanel } from './NowPanelContent';
+// Import the CSS styles
+import styles from '../styles/nowWidgetStyles.css';
+
 /**
  * Configuration interface for initializing the widget.
  */
@@ -49,9 +52,8 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
   shadow.appendChild(panel);
 
   // Append styles to Shadow DOM
-  const style = document.createElement('link');
-  style.rel = 'stylesheet';
-  style.href = 'styles/nowWidgetStyles.css'; // Ensure correct path if using bundlers
+  const style = document.createElement('style');
+  style.textContent = styles; // Use the imported CSS content
   shadow.appendChild(style);
 
   // Start animation loop

@@ -14,7 +14,23 @@ export const getScriptAttributes = (): {
     buttonSize?: string;
 } | null => {
     const scripts = document.getElementsByTagName('script');
-    const currentScript = scripts[scripts.length - 1];
+    let currentScript: HTMLScriptElement | null = null;
+
+    for (let i = 0; i < scripts.length; i++) {
+        const script = scripts[i];
+
+        // Check if the script has the required data attributes
+        if (script.getAttribute('data-user-id') && script.getAttribute('data-token')) {
+            currentScript = script;
+            break;
+        }
+    }
+
+    if (!currentScript) {
+        console.error("NowWidget: Unable to locate the current script.");
+        return null;
+    }
+
     const userId = currentScript.getAttribute('data-user-id');
     const token = currentScript.getAttribute('data-token');
     const theme = currentScript.getAttribute('data-theme');
@@ -33,7 +49,7 @@ export const getScriptAttributes = (): {
         theme: theme ?? undefined,
         position: position ?? undefined,
         buttonColor: buttonColor ?? undefined,
-        buttonSize: buttonSize ?? undefined
+        buttonSize: buttonSize ?? undefined,
     };
 };
 

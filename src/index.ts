@@ -6,6 +6,7 @@ import { getScriptAttributes } from './utils/nowWidgetUtils';
  * Initializes the NowWidget by fetching script attributes and setting up the widget.
  */
 const init = async (): Promise<void> => {
+    console.log('init');
     const attributes = getScriptAttributes();
     if (!attributes) return;
     const { userId, token, theme, position, buttonColor, buttonSize } = attributes;
