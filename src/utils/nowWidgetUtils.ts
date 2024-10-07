@@ -111,7 +111,7 @@ export const renderUserInfo = (user: User | null, panel: HTMLElement): void => {
  * @param posts - An array of Post objects.
  * @param panel - The widget panel HTMLElement.
  */
-export const renderPosts = (posts: Post[], panel: HTMLElement): void => {
+export const renderPostsInPanel = (posts: Post[], panel: HTMLElement): void => {
     const content = panel.querySelector('#now-widget-content');
     if (content) {
         content.innerHTML = '<h2>Your Posts</h2>';
@@ -121,6 +121,8 @@ export const renderPosts = (posts: Post[], panel: HTMLElement): void => {
             postEl.innerHTML = `<p>${post.content}</p>`;
             content.appendChild(postEl);
         });
+    } else {
+        console.error('Content element not found in the panel');
     }
 };
 
@@ -128,22 +130,20 @@ export const renderPosts = (posts: Post[], panel: HTMLElement): void => {
  * Displays an error message inside the widget panel.
  * @param error - The error message to display.
  */
-export const displayError = (error: string): void => {
-    const panel = document.getElementById('now-widget-panel');
-    if (panel) {
-        const errorDiv = document.createElement('div');
-        errorDiv.classList.add('now-widget-error');
-        errorDiv.textContent = `Error: ${error}`;
-        panel.appendChild(errorDiv);
-    }
+export const displayError = (error: string, panel: HTMLElement): void => {
+    const errorDiv = document.createElement('div');
+    errorDiv.classList.add('now-widget-error');
+    errorDiv.textContent = `Error: ${error}`;
+    panel.appendChild(errorDiv);
 };
 
 /**
  * Handles errors by updating the widget state and displaying the error message.
  * @param error - The error message.
  */
-export const handleError = (error: string): void => {
+export const handleError = (error: string, panel: HTMLElement): void => {
     setError(error);
+    displayError(error, panel);
 };
 
 export const createShadowContainer = (): ShadowRoot => {

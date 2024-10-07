@@ -1,9 +1,10 @@
 import { Post, User } from '../types/types';
-import { renderPosts, renderUserInfo } from '../utils/nowWidgetUtils';
+import { renderPostsInPanel, renderUserInfo } from '../utils/nowWidgetUtils';
 
-let widgetRoot: Document | ShadowRoot;
+let widgetRoot: HTMLElement;
 
-export const initializeWidgetRoot = (root: Document | ShadowRoot) => {
+// Initialize widget root with HTMLElement
+export const initializeWidgetRoot = (root: HTMLElement) => {
     widgetRoot = root;
 };
 
@@ -26,7 +27,7 @@ export const widgetState: WidgetState = {
 // Update functions
 export const setLoading = (isLoading: boolean): void => {
     widgetState.isLoading = isLoading;
-    const panel = widgetRoot.getElementById('now-widget-panel');
+    const panel = widgetRoot.querySelector('#now-widget-panel') as HTMLElement | null;
     if (panel) {
         if (isLoading) {
             panel.classList.add('loading');
@@ -54,12 +55,12 @@ export const setUser = (user: User | null) => {
 
 // UI Update function
 const updateUI = () => {
-    console.log('updating UI')
+    console.log('updating UI');
     if (!widgetRoot) {
         console.error('Widget root is not initialized.');
         return;
     }
-    const panel = widgetRoot.getElementById('now-widget-panel');
+    const panel = widgetRoot.querySelector('#now-widget-panel') as HTMLElement | null;
     if (panel) {
         if (widgetState.isLoading) {
             showLoading(panel);
@@ -68,17 +69,17 @@ const updateUI = () => {
         }
 
         if (widgetState.error) {
-            displayError(panel, widgetState.error);
+            showError(widgetState.error);
         } else {
             hideError(panel);
             renderUserInfo(widgetState.user, panel);
-            renderPosts(widgetState.posts, panel);
+            renderPostsInPanel(widgetState.posts, panel);
         }
     }
 };
 
 const showLoading = (panel: HTMLElement) => {
-    let loadingDiv = panel.querySelector('.now-widget-loading') as HTMLElement;
+    let loadingDiv = panel.querySelector('.now-widget-loading') as HTMLElement | null;
     if (!loadingDiv) {
         loadingDiv = document.createElement('div');
         loadingDiv.classList.add('now-widget-loading');
@@ -89,25 +90,28 @@ const showLoading = (panel: HTMLElement) => {
 };
 
 const hideLoading = (panel: HTMLElement) => {
-    const loadingDiv = panel.querySelector('.now-widget-loading') as HTMLElement;
+    const loadingDiv = panel.querySelector('.now-widget-loading') as HTMLElement | null;
     if (loadingDiv) {
         loadingDiv.style.display = 'none';
     }
 };
 
-const displayError = (panel: HTMLElement, error: string) => {
-    let errorDiv = panel.querySelector('.now-widget-error') as HTMLElement;
-    if (!errorDiv) {
-        errorDiv = document.createElement('div');
-        errorDiv.classList.add('now-widget-error');
-        panel.appendChild(errorDiv);
+export const showError = (error: string): void => {
+    const panel = widgetRoot.querySelector('#now-widget-panel') as HTMLElement | null;
+    if (panel) {
+        let errorDiv = panel.querySelector('.now-widget-error') as HTMLElement | null;
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.classList.add('now-widget-error');
+            panel.appendChild(errorDiv);
+        }
+        errorDiv.textContent = `Error: ${error}`;
+        errorDiv.style.display = 'block';
     }
-    errorDiv.textContent = `Error: ${error}`;
-    errorDiv.style.display = 'block';
 };
 
 const hideError = (panel: HTMLElement) => {
-    const errorDiv = panel.querySelector('.now-widget-error') as HTMLElement;
+    const errorDiv = panel.querySelector('.now-widget-error') as HTMLElement | null;
     if (errorDiv) {
         errorDiv.style.display = 'none';
     }

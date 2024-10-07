@@ -1,12 +1,12 @@
 // src/components/NowWidget.ts
 
 import { fetchUserInfo, fetchUserPosts } from '../api/auth';
-import { setLoading, setPosts, setUser } from '../state/state';
+import { initializeWidgetRoot, setLoading, setPosts, setUser } from '../state/state';
 import styles from '../styles/nowWidgetStyles.css';
 import { addEventListeners } from '../utils/nowEventHandlers';
 import { applyTheme, setPosition } from '../utils/nowStyleUtils';
 import {
-  createWidgetContainer,
+  createWidgetContainer, // Ensure this is correctly imported
   handleError,
   injectGlobalStyles,
   togglePanel
@@ -37,6 +37,9 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
   // Create widget container and append to body
   const container = createWidgetContainer();
 
+  // Initialize widget root for state management
+  initializeWidgetRoot(container);
+
   // Check if current URL is '/'
   // if (window.location.pathname !== '/') {
   //   console.log('NowWidget is only displayed on the root URL.');
@@ -63,7 +66,7 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
   console.log('Styles appended to widget container');
 
   // Show loading indicator
-  setLoading(true); // Assuming setLoading accepts (panel: HTMLElement, isLoading: boolean)
+  setLoading(true);
 
   try {
     // Fetch user data
@@ -71,7 +74,9 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
       fetchUserPosts(config.userId, config.token),
       fetchUserInfo(config.userId, config.token),
     ]);
-    console.log(posts)
+    console.log('Fetched posts:', posts);
+    console.log('Fetched user:', user);
+
     // Update state
     setPosts(posts);
     setUser(user);
@@ -80,9 +85,10 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
     updateNowPanel(panel, { userId: config.userId, token: config.token, posts, user });
 
   } catch (error: any) {
-    handleError(error.message);
+    console.error('Error fetching data:', error);
+    handleError(error.message, panel);
   } finally {
-    setLoading(false); // Corrected to pass boolean as second argument
+    setLoading(false);
   }
 
   // Apply theme and position settings
