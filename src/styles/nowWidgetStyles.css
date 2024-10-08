@@ -36,6 +36,7 @@
 #now-widget-container {
   position: fixed;
   height: 100vh;
+  width: 100vw;
   min-width: 30vw;
   top: 50%; /* Adjust as needed (left or right) */
   transform: translateY(-50%);
