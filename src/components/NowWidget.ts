@@ -26,6 +26,7 @@ interface WidgetConfig {
   buttonSize?: number;
 }
 
+
 /**
  * Initializes the NowWidget by creating UI components, fetching user data, and setting up the environment.
  * @param config - Configuration object containing userId, token, theme, position, buttonColor, and buttonSize.
@@ -39,7 +40,7 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
 
   // Initialize widget root for state management
   initializeWidgetRoot(container);
-
+  setPosition(config.position);
   // Check if current URL is '/'
   // if (window.location.pathname !== '/') {
   //   console.log('NowWidget is only displayed on the root URL.');
@@ -58,6 +59,10 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
   // Create the panel once
   const panel = createNowPanel({ userId: config.userId, token: config.token, posts: [], user: null });
   container.appendChild(panel);
+
+  // Set initial panel position
+  const position = config.position || 'right';
+  (panel.style as any)[position] = `-${panel.offsetWidth}px`;
 
   // Append styles to the widget container
   const style = document.createElement('style');

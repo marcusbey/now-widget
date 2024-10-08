@@ -72,3 +72,4 @@ export interface Attachment {
     url: string;
     type: 'image' | 'video' | 'document';
 }
+

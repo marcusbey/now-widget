@@ -74,14 +74,16 @@ export const createWidgetContainer = (): HTMLElement => {
  */
 export const togglePanel = (isOpen: boolean, root: Element): void => {
     const panel = root.querySelector('#now-widget-panel') as HTMLElement | null;
+    const position = document.body.getAttribute('data-widget-position') || 'right';
 
     if (panel) {
         if (isOpen) {
             panel.classList.add('open');
+            (panel.style as any)[position] = '0';
         } else {
             panel.classList.remove('open');
+            (panel.style as any)[position] = `-${panel.offsetWidth}px`;
         }
-        // Removed margin adjustments to maintain independence as per earlier decisions
     } else {
         console.error('Panel element not found');
     }
