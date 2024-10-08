@@ -54,7 +54,9 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
     backgroundColor: 'transparent',
   });
 
-  container.appendChild(button);
+  // Move the button outside of the container
+  // container.appendChild(button);
+  document.body.appendChild(button); // {{ edit_1 }}
 
   // Create the panel once
   const panel = createNowPanel({ userId: config.userId, token: config.token, posts: [], user: null });

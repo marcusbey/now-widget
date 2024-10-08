@@ -47,7 +47,7 @@ export const handleMouseMove = (e: MouseEvent, root: Element): void => {
  */
 export const addEventListeners = (container: HTMLElement): void => {
     // Click Event to Toggle Panel
-    const button = container.querySelector('#now-widget-button') as HTMLElement | null;
+    const button = document.querySelector('#now-widget-button') as HTMLElement | null; // {{ edit_2 }}
     const panel = container.querySelector('#now-widget-panel') as HTMLElement | null;
 
     button?.addEventListener('click', () => togglePanel(true, container));

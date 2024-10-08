@@ -35,12 +35,16 @@
 /* Button Styles */
 #now-widget-container {
   position: fixed;
-  height: 100vh;
-  width: 100vw;
-  min-width: 30vw;
-  top: 50%; /* Adjust as needed (left or right) */
+  top: 0; /* Adjust as needed (left or right) */
   transform: translateY(-50%);
   z-index: 10000; /* High z-index to overlay most elements */
+}
+
+#now-widget-button {
+  position: absolute;
+  bottom: 200px;
+  right: 200px;
+  /* You can retain or adjust other styles as needed */
 }
 
 .now-widget-button {
