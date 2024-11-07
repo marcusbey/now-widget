@@ -1,4 +1,3 @@
-import { setError } from '../state/state';
 import { Post, User } from '../types/types';
 
 /**
@@ -76,6 +75,8 @@ export const createWidgetContainer = (): HTMLElement => {
 
     return container;
 }
+
+
 /**
  * Toggles the visibility of the NowWidget side panel.
  * @param isOpen - Boolean indicating whether to open or close the panel.
@@ -146,13 +147,17 @@ export const displayError = (error: string, panel: HTMLElement): void => {
 };
 
 /**
- * Handles errors by updating the widget state and displaying the error message.
- * @param error - The error message.
+ * Handles errors by displaying them in the panel.
+ * @param message - The error message to display.
+ * @param panel - The panel HTMLElement where the error should be displayed.
  */
-export const handleError = (error: string, panel: HTMLElement): void => {
-    setError(error);
-    displayError(error, panel);
+export const handleError = (message: string, panel: HTMLElement): void => {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'now-widget-error';
+    errorDiv.textContent = `Error: ${message}`;
+    panel.appendChild(errorDiv);
 };
+
 
 export const createShadowContainer = (): ShadowRoot => {
     const container = document.createElement('div');

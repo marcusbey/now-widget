@@ -3,10 +3,10 @@
 import { fetchUserInfo, fetchUserPosts } from '../api/auth';
 import { initializeWidgetRoot, setLoading, setPosts, setUser } from '../state/state';
 import styles from '../styles/nowWidgetStyles.css?inline';
-import { addEventListeners } from '../utils/nowEventHandlers';
+import { addEventListeners } from '../utils/nowEventsUtils';
 import { applyTheme, setPosition } from '../utils/nowStyleUtils';
 import {
-  createWidgetContainer, // Ensure this is correctly imported
+  createWidgetContainer,
   handleError,
   injectGlobalStyles,
   togglePanel
