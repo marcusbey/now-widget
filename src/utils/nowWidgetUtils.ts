@@ -58,36 +58,43 @@ export const getScriptAttributes = (): {
  * @returns The widget container HTMLElement.
  */
 export const createWidgetContainer = (): HTMLElement => {
-    let container = document.getElementById('now-widget-container') as HTMLElement;
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'now-widget-container';
-        document.body.appendChild(container);
-    }
-    return container;
-};
+    // Create widget container
+    const container = document.createElement('div');
+    container.id = 'now-widget-container';
 
+    // Wrap existing body content
+    const wrapper = document.createElement('div');
+    wrapper.id = 'now-widget-host-content';
+
+    // Move all body children to wrapper
+    while (document.body.firstChild) {
+        wrapper.appendChild(document.body.firstChild);
+    }
+
+    document.body.appendChild(wrapper);
+    document.body.appendChild(container);
+
+    return container;
+}
 /**
  * Toggles the visibility of the NowWidget side panel.
  * @param isOpen - Boolean indicating whether to open or close the panel.
  * @param root - The root Element containing the panel.
  */
 export const togglePanel = (isOpen: boolean, root: Element): void => {
-    const panel = root.querySelector('#now-widget-panel') as HTMLElement | null;
-    const position = document.body.getAttribute('data-widget-position') || 'right';
+    const panel = root.querySelector('.now-widget-panel') as HTMLElement;
+    const hostContent = document.getElementById('now-widget-host-content');
 
-    if (panel) {
+    if (panel && hostContent) {
         if (isOpen) {
             panel.classList.add('open');
-            (panel.style as any)[position] = '0';
+            hostContent.classList.add('panel-open');
         } else {
             panel.classList.remove('open');
-            (panel.style as any)[position] = `-${panel.offsetWidth}px`;
+            hostContent.classList.remove('panel-open');
         }
-    } else {
-        console.error('Panel element not found');
     }
-};
+}
 
 /**
  * Displays user information inside the widget panel.

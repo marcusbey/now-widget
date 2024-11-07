@@ -29,22 +29,28 @@
 }
 
 /* Page Element Styles */
-/* #now-widget-host-content {
-  /* Styles for wrapping host content */
+#now-widget-host-content {
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+  min-height: 100vh;
+}
+
+#now-widget-host-content.panel-open {
+  transform: translateX(400px);
+}
 
 /* Button Styles */
 #now-widget-container {
   position: fixed;
-  top: 0; /* Adjust as needed (left or right) */
+  top: 0;
   transform: translateY(-50%);
-  z-index: 10000; /* High z-index to overlay most elements */
+  z-index: 10000;
 }
 
 #now-widget-button {
   position: absolute;
   bottom: 200px;
   right: 200px;
-  /* You can retain or adjust other styles as needed */
 }
 
 .now-widget-button {
@@ -90,23 +96,33 @@
 }
 
 /* Panel Styles */
-#now-widget-panel {
+
+.now-widget-panel {
   position: fixed;
   top: 0;
-  right: -30vw; /* Hidden by default */
-  width: 30vw;
-  height: 100%;
-  background-color: var(--theme-background);
-  color: var(--theme-color);
-  transition: right 0.3s ease;
-  z-index: 9999; /* Below the button */
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  left: 0;
+  height: 100vh;
+  width: 400px;
+  background: var(--theme-background);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 9999;
 }
 
-#now-widget-panel.open {
+/* Position specific styles */
+[data-widget-position="left"] #now-widget-panel {
   left: 0;
+  transform: translateX(-100%);
+}
+
+[data-widget-position="right"] #now-widget-panel {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.now-widget-panel.open {
+  transform: translateX(0);
 }
 
 .now-widget-close-button {
@@ -194,36 +210,23 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  #now-widget-panel {
-    width: 50vw;
-    right: -50vw;
-  }
-
-  #now-widget-panel.open {
-    right: 0;
-  }
-}
-
 @media (max-width: 768px) {
   #now-widget-panel {
     width: 80vw;
-    right: -80vw;
   }
 
-  #now-widget-panel.open {
-    right: 0;
+  #now-widget-host-content.panel-open {
+    transform: translateX(80vw);
   }
 }
 
 @media (max-width: 600px) {
   #now-widget-panel {
     width: 100%;
-    right: -100%;
   }
 
-  #now-widget-panel.open {
-    right: 0;
+  [data-widget-position="left"] #now-widget-panel {
+    left: -100%;
   }
 
   #now-widget-container {

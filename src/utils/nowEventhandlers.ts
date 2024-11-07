@@ -46,25 +46,29 @@ export const handleMouseMove = (e: MouseEvent, root: Element): void => {
  * Adds all necessary event listeners to the widget container.
  */
 export const addEventListeners = (container: HTMLElement): void => {
-    // Click Event to Toggle Panel
-    const button = document.querySelector('#now-widget-button') as HTMLElement | null; // {{ edit_2 }}
-    const panel = container.querySelector('#now-widget-panel') as HTMLElement | null;
+    const button = document.querySelector('#now-widget-button') as HTMLElement;
+    const panel = container.querySelector('#now-widget-panel') as HTMLElement;
 
-    button?.addEventListener('click', () => togglePanel(true, container));
+    button?.addEventListener('click', () => {
+        const isOpen = panel.classList.contains('open');
+        togglePanel(!isOpen, container);
+    });
 
-    // Scroll Event to Hide/Show Button and Close Panel
-    window.addEventListener('scroll', () => handleScroll(container));
-
-    // Mouse Movement Event to Adjust Animation
-    container.addEventListener('mousemove', (e) => handleMouseMove(e as MouseEvent, container));
-
-    // Close Panel When Clicking Outside
+    // Close panel on outside click
     document.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
         if (
             panel?.classList.contains('open') &&
-            !panel.contains(event.target as Node) &&
-            !button?.contains(event.target as Node)
+            !panel.contains(target) &&
+            !button?.contains(target)
         ) {
+            togglePanel(false, container);
+        }
+    });
+
+    // Close panel on ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && panel?.classList.contains('open')) {
             togglePanel(false, container);
         }
     });

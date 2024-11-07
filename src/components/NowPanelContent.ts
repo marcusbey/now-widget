@@ -29,27 +29,15 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   const closeButton = document.createElement('button');
   closeButton.classList.add('now-widget-close-button');
   closeButton.innerHTML = '&times;';
-  closeButton.onclick = () => togglePanel(false, panel);
-  closeButton.style.cssText = `
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: red;
-    color: white;
-    font-size: 20px;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-  `;
+  closeButton.onclick = () => togglePanel(false, panel.parentElement!);
   panel.appendChild(closeButton);
 
+  // Create content container
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('now-widget-content');
-  console.log('Panel created with id and class:', panel.id, panel.className);
   panel.appendChild(contentDiv);
 
-  // Populate panel with user info and posts
+  // Add user info if available
   if (user) {
     const userInfo = document.createElement('div');
     userInfo.className = 'now-widget-user-info';
@@ -63,14 +51,11 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
     contentDiv.appendChild(userInfo);
   }
 
+  // Create posts container and render posts
   const postsContainer = document.createElement('div');
-  postsContainer.id = 'now-widget-content';
+  postsContainer.classList.add('now-widget-posts');
   contentDiv.appendChild(postsContainer);
-
-  // Render posts
   renderPosts(posts, postsContainer);
-
-  console.log('Close button created and added to panel');
 
   return panel;
 };
@@ -81,22 +66,16 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
  * @param container - The container HTMLElement where posts will be appended.
  */
 const renderPosts = (posts: Post[], container: HTMLElement): void => {
-  const content = container.querySelector('#now-widget-content');
-  if (content) {
-    console.log('Rendering posts:', posts); // Add this line for debugging
-    content.innerHTML = '<h2>Your Posts</h2>';
-    if (posts.length === 0) {
-      content.innerHTML += '<p>No posts available.</p>';
-    } else {
-      posts.forEach(post => {
-        const postEl = document.createElement('div');
-        postEl.className = 'now-widget-post';
-        postEl.innerHTML = `<p>${post.content}</p>`;
-        content.appendChild(postEl);
-      });
-    }
+  container.innerHTML = '<h2>Your Posts</h2>';
+  if (posts.length === 0) {
+    container.innerHTML += '<p>No posts available.</p>';
   } else {
-    console.error('Content element not found in the panel');
+    posts.forEach(post => {
+      const postEl = document.createElement('div');
+      postEl.className = 'now-widget-post';
+      postEl.innerHTML = `<p>${post.content}</p>`;
+      container.appendChild(postEl);
+    });
   }
 };
 
@@ -131,14 +110,14 @@ export const updateNowPanel = (panel: HTMLElement, config: PanelConfig): void =>
   const closeButton = document.createElement('button');
   closeButton.classList.add('now-widget-close-button');
   closeButton.innerHTML = '&times;';
-  closeButton.onclick = () => togglePanel(false, panel);
+  closeButton.onclick = () => togglePanel(false, panel.parentElement!);
   panel.appendChild(closeButton);
 
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('now-widget-content');
   panel.appendChild(contentDiv);
 
-  // Populate panel with user info and posts
+  // Add user info if available
   if (user) {
     const userInfo = document.createElement('div');
     userInfo.className = 'now-widget-user-info';
@@ -152,10 +131,9 @@ export const updateNowPanel = (panel: HTMLElement, config: PanelConfig): void =>
     contentDiv.appendChild(userInfo);
   }
 
+  // Create posts container and render posts
   const postsContainer = document.createElement('div');
-  postsContainer.id = 'now-widget-content';
+  postsContainer.classList.add('now-widget-posts');
   contentDiv.appendChild(postsContainer);
-
-  // Render posts
   renderPosts(posts, postsContainer);
 };
