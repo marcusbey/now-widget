@@ -20,6 +20,15 @@ export interface User {
     issuedNotifications?: Notification[];
 }
 
+export interface ScriptAttributes {
+    userId: string;
+    token: string;
+    theme?: string;
+    position?: string;
+    buttonColor?: string;
+    buttonSize?: string;
+}
+
 export interface Post {
     id: string;
     user: User;
