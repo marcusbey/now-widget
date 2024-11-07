@@ -25,6 +25,12 @@ export const stopAnimation = (): void => {
     cancelAnimationFrame(animationFrameId);
 };
 
+/**
+ * Adjusts the spin speed of the text ring based on proximity and hover state.
+ * @param isNear - Indicates if the cursor is near the button.
+ * @param isHovered - Indicates if the button is currently hovered.
+ * @param textRing - The HTMLElement representing the text ring.
+ */
 export const adjustSpinSpeed = (
     isNear: boolean,
     isHovered: boolean,
@@ -40,3 +46,4 @@ export const adjustSpinSpeed = (
         textRing.classList.remove('slow-spin', 'fast-spin');
     }
 };
+

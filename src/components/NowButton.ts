@@ -10,28 +10,6 @@ interface ButtonOptions {
 }
 
 /**
- * Adjusts the spin speed of the text ring based on proximity and hover state.
- * @param isNear - Indicates if the cursor is near the button.
- * @param isHovered - Indicates if the button is currently hovered.
- * @param textRing - The HTMLElement representing the text ring.
- */
-export const adjustSpinSpeed = (
-  isNear: boolean,
-  isHovered: boolean,
-  textRing: HTMLElement
-): void => {
-  if (isHovered) {
-    textRing.classList.add('fast-spin');
-    textRing.classList.remove('slow-spin');
-  } else if (isNear) {
-    textRing.classList.add('slow-spin');
-    textRing.classList.remove('fast-spin');
-  } else {
-    textRing.classList.remove('slow-spin', 'fast-spin');
-  }
-};
-
-/**
  * Creates the NowWidget button element.
  * @param onClick - Callback function to execute on button click.
  * @param options - Configuration object containing button color, size, and background color.
