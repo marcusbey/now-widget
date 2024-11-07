@@ -57,24 +57,35 @@ export const getScriptAttributes = (): {
  * @returns The widget container HTMLElement.
  */
 export const createWidgetContainer = (): HTMLElement => {
-    // Create widget container
-    const container = document.createElement('div');
-    container.id = 'now-widget-container';
+    let container = document.getElementById('now-widget-container');
 
-    // Wrap existing body content
-    const wrapper = document.createElement('div');
-    wrapper.id = 'now-widget-host-content';
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'now-widget-container';
 
-    // Move all body children to wrapper
-    while (document.body.firstChild) {
-        wrapper.appendChild(document.body.firstChild);
+        // Create host content wrapper if it doesn't exist
+        let hostContent = document.getElementById('now-widget-host-content');
+        if (!hostContent) {
+            hostContent = document.createElement('div');
+            hostContent.id = 'now-widget-host-content';
+
+            // Move existing body content to wrapper
+            while (document.body.firstChild) {
+                hostContent.appendChild(document.body.firstChild);
+            }
+            document.body.appendChild(hostContent);
+        }
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'now-widget-overlay';
+        document.body.appendChild(overlay);
+
+        document.body.appendChild(container);
     }
 
-    document.body.appendChild(wrapper);
-    document.body.appendChild(container);
-
     return container;
-}
+};
 
 
 /**
@@ -83,20 +94,25 @@ export const createWidgetContainer = (): HTMLElement => {
  * @param root - The root Element containing the panel.
  */
 export const togglePanel = (isOpen: boolean, root: Element): void => {
-    const panel = root.querySelector('.now-widget-panel') as HTMLElement | null;
+    const panel = root.querySelector('.now-widget-panel') as HTMLElement;
+    const button = document.getElementById('now-widget-button') as HTMLElement;
     const hostContent = document.getElementById('now-widget-host-content');
+    const overlay = document.querySelector('.now-widget-overlay') as HTMLElement;
 
-    if (panel && hostContent) {
+    if (panel && hostContent && overlay) {
         if (isOpen) {
             panel.classList.add('open');
+            button.classList.add('panel-open');
             hostContent.classList.add('panel-open');
+            overlay.classList.add('visible');
         } else {
             panel.classList.remove('open');
+            button.classList.remove('panel-open');
             hostContent.classList.remove('panel-open');
+            overlay.classList.remove('visible');
         }
     }
 };
-
 /**
  * Displays user information inside the widget panel.
  * @param user - The User object containing user information.

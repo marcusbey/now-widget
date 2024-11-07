@@ -20,6 +20,7 @@ export const handleScroll = (root: Element): void => {
     }
 };
 
+
 /**
  * Handles the mouse move event to adjust the spin speed of the text ring.
  * @param e - The MouseEvent object.

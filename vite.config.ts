@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite'
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
+import { defineConfig } from 'vite';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 export default defineConfig({
     plugins: [cssInjectedByJsPlugin()],
     build: {
         lib: {
-            entry: 'src/index.ts',
+            entry: 'src/lib/index.ts',
             name: 'NowWidget',
             fileName: 'now-widget',
             formats: ['umd']
@@ -26,4 +26,4 @@ export default defineConfig({
             localsConvention: 'camelCase'
         }
     }
-}) 
+});
