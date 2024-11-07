@@ -1,12 +1,14 @@
 import { defineConfig } from 'vite'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 export default defineConfig({
+    plugins: [cssInjectedByJsPlugin()],
     build: {
         lib: {
             entry: 'src/index.ts',
             name: 'NowWidget',
             fileName: 'now-widget',
-            formats: ['es', 'umd']
+            formats: ['umd']
         },
         rollupOptions: {
             output: {
