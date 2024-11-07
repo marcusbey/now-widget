@@ -19,7 +19,7 @@ interface PanelConfig {
  * @returns The NowWidget panel HTMLElement.
  */
 export const createNowPanel = (config: PanelConfig): HTMLElement => {
-  const { userId, token, posts, user } = config;
+  const { posts, user } = config;
 
   const panel = document.createElement('div');
   panel.id = 'now-widget-panel';
@@ -85,14 +85,7 @@ const renderPosts = (posts: Post[], container: HTMLElement): void => {
  * @returns The content string with hashtags highlighted.
  */
 const highlightHashtags = (content: string): string => {
-  return content
-    .split(' ')
-    .map(word =>
-      word.startsWith('#')
-        ? `<span class="now-widget-hashtag"><a href="/hashtag/${word.slice(1)}">${word}</a></span>`
-        : `${word} `
-    )
-    .join('');
+  return content.replace(/#(\w+)/g, '<span class="highlight">#$1</span>');
 };
 
 /**
@@ -101,7 +94,7 @@ const highlightHashtags = (content: string): string => {
  * @param config - New configuration for the panel.
  */
 export const updateNowPanel = (panel: HTMLElement, config: PanelConfig): void => {
-  const { userId, token, posts, user } = config;
+  const { posts, user } = config;
 
   // Clear existing content
   panel.innerHTML = '';
@@ -136,4 +129,24 @@ export const updateNowPanel = (panel: HTMLElement, config: PanelConfig): void =>
   postsContainer.classList.add('now-widget-posts');
   contentDiv.appendChild(postsContainer);
   renderPosts(posts, postsContainer);
+};
+
+/**
+ * Renders the list of posts inside the given container.
+ * @param posts - Array of Post objects.
+ * @param panel - The panel HTMLElement where posts will be appended.
+ */
+export const renderPostsInPanel = (posts: Post[], panel: HTMLElement): void => {
+  const content = panel.querySelector('#now-widget-content');
+  if (content) {
+    content.innerHTML = '<h2>Your Posts</h2>';
+    posts.forEach(post => {
+      const postEl = document.createElement('div');
+      postEl.className = 'now-widget-post';
+      postEl.innerHTML = `<p>${highlightHashtags(post.content)}</p>`;
+      content.appendChild(postEl);
+    });
+  } else {
+    console.error('Content element not found in the panel');
+  }
 };

@@ -18,5 +18,10 @@ export default defineConfig({
         sourcemap: true,
         minify: 'terser',
         outDir: 'dist'
+    },
+    css: {
+        modules: {
+            localsConvention: 'camelCase'
+        }
     }
 }) 
