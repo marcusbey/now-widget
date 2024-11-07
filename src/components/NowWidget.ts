@@ -1,3 +1,4 @@
+// Start of Selection
 // src/components/NowWidget.ts
 
 import { fetchUserInfo, fetchUserPosts } from '../api/auth';
@@ -40,12 +41,7 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
 
   // Initialize widget root for state management
   initializeWidgetRoot(container);
-  setPosition(config.position);
-  // Check if current URL is '/'
-  // if (window.location.pathname !== '/') {
-  //   console.log('NowWidget is only displayed on the root URL.');
-  //   return;
-  // }
+  setPosition();
 
   // Create and append NowButton with updated onClick handler
   const button = createNowButton(() => togglePanel(true, container), {
@@ -53,24 +49,23 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
     size: config.buttonSize || 60,
     backgroundColor: 'transparent',
   });
-
-  // Move the button outside of the container
-  // container.appendChild(button);
-  document.body.appendChild(button); // {{ edit_1 }}
+  document.body.appendChild(button);
 
   // Create the panel once
   const panel = createNowPanel({ userId: config.userId, token: config.token, posts: [], user: null });
   container.appendChild(panel);
 
   // Set initial panel position
-  const position = config.position || 'right';
-  (panel.style as any)[position] = `-${panel.offsetWidth}px`;
+  panel.style.left = `-${panel.offsetWidth}px`;
 
   // Append styles to the widget container
   const style = document.createElement('style');
-  style.textContent = styles; // Use the imported CSS content
+  style.textContent = styles;
   container.appendChild(style);
   console.log('Styles appended to widget container');
+
+  // Add Event Listeners early
+  addEventListeners(container);
 
   // Show loading indicator
   setLoading(true);
@@ -100,8 +95,5 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
 
   // Apply theme and position settings
   applyTheme(config.theme);
-  setPosition(config.position);
-
-  // Add Event Listeners
-  addEventListeners(container);
+  setPosition();
 };

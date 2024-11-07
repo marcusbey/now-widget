@@ -4,7 +4,7 @@
 :root {
   --button-color: #007bff;
   --button-size: 60px;
-  --panel-width: 300px;
+  --panel-width: 400px;
   --theme-background: #ffffff;
   --theme-color: #000000;
 }
@@ -43,7 +43,7 @@
 #now-widget-container {
   position: fixed;
   top: 0;
-  transform: translateY(-50%);
+  left: 0; /* Align container to the left */
   z-index: 10000;
 }
 
@@ -100,25 +100,19 @@
 .now-widget-panel {
   position: fixed;
   top: 0;
-  left: 0;
-  height: 100vh;
-  width: 400px;
-  background: var(--theme-background);
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
-  z-index: 9999;
+  left: -400px;
+  width: var(--panel-width);
+  height: 100%;
+  background-color: var(--theme-background);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
 }
 
-/* Position specific styles */
-[data-widget-position="left"] #now-widget-panel {
-  left: 0;
-  transform: translateX(-100%);
-}
-
-[data-widget-position="right"] #now-widget-panel {
-  right: 0;
-  transform: translateX(100%);
+.now-widget-panel.dark-theme {
+  background-color: #333;
+  color: #fff;
 }
 
 .now-widget-panel.open {
@@ -211,7 +205,7 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  #now-widget-panel {
+  .now-widget-panel {
     width: 80vw;
   }
 
@@ -221,11 +215,11 @@
 }
 
 @media (max-width: 600px) {
-  #now-widget-panel {
+  .now-widget-panel {
     width: 100%;
   }
 
-  [data-widget-position="left"] #now-widget-panel {
+  [data-widget-position="left"] .now-widget-panel {
     left: -100%;
   }
 

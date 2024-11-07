@@ -1,3 +1,4 @@
+// Start of Selection
 /**
  * Applies the selected theme to the widget.
  * @param theme - The theme to apply ('light' or 'dark').
@@ -16,20 +17,15 @@ export const applyTheme = (theme?: string): void => {
 
 /**
  * Sets the position of the widget button on the screen.
- * @param position - The position to set ('left' or 'right').
+ * @param position - The position to set ('left').
  */
-export const setPosition = (position?: string): void => {
+export const setPosition = (): void => {
     const containers = document.getElementsByClassName('now-widget-container');
     if (containers.length > 0) {
         const container = containers[0] as HTMLElement;
-        if (position === 'left') {
-            container.style.right = 'auto';
-            container.style.left = '0px';
-        } else {
-            container.style.left = 'auto';
-            container.style.right = '0px';
-        }
+        container.style.left = '0px';
+        container.style.right = 'auto';
     }
     // Store the position in a data attribute
-    document.body.setAttribute('data-widget-position', position || 'right');
+    document.body.setAttribute('data-widget-position', 'left');
 };

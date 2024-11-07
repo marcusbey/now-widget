@@ -46,30 +46,33 @@ export const handleMouseMove = (e: MouseEvent, root: Element): void => {
  * Adds all necessary event listeners to the widget container.
  */
 export const addEventListeners = (container: HTMLElement): void => {
-    const button = document.querySelector('#now-widget-button') as HTMLElement;
-    const panel = container.querySelector('#now-widget-panel') as HTMLElement;
+    const button = container.querySelector('#now-widget-button') as HTMLElement | null;
+    const panel = container.querySelector('#now-widget-panel') as HTMLElement | null;
 
-    button?.addEventListener('click', () => {
-        const isOpen = panel.classList.contains('open');
-        togglePanel(!isOpen, container);
-    });
+    if (button && panel) {
+        // Toggle panel on button click
+        button.addEventListener('click', () => {
+            const isOpen = panel.classList.contains('open');
+            togglePanel(!isOpen, container);
+        });
 
-    // Close panel on outside click
-    document.addEventListener('click', (event) => {
-        const target = event.target as HTMLElement;
-        if (
-            panel?.classList.contains('open') &&
-            !panel.contains(target) &&
-            !button?.contains(target)
-        ) {
-            togglePanel(false, container);
-        }
-    });
+        // Close panel on outside click
+        document.addEventListener('click', (event) => {
+            const target = event.target as HTMLElement;
+            if (
+                panel.classList.contains('open') &&
+                !panel.contains(target) &&
+                !button.contains(target)
+            ) {
+                togglePanel(false, container);
+            }
+        });
 
-    // Close panel on ESC
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && panel?.classList.contains('open')) {
-            togglePanel(false, container);
-        }
-    });
+        // Close panel on ESC key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && panel.classList.contains('open')) {
+                togglePanel(false, container);
+            }
+        });
+    }
 };

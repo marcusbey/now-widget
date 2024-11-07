@@ -83,7 +83,7 @@ export const createWidgetContainer = (): HTMLElement => {
  * @param root - The root Element containing the panel.
  */
 export const togglePanel = (isOpen: boolean, root: Element): void => {
-    const panel = root.querySelector('.now-widget-panel') as HTMLElement;
+    const panel = root.querySelector('.now-widget-panel') as HTMLElement | null;
     const hostContent = document.getElementById('now-widget-host-content');
 
     if (panel && hostContent) {
@@ -95,7 +95,7 @@ export const togglePanel = (isOpen: boolean, root: Element): void => {
             hostContent.classList.remove('panel-open');
         }
     }
-}
+};
 
 /**
  * Displays user information inside the widget panel.
