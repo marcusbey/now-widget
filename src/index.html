@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widget Test</title>
+    <style>
+      body {
+        background-color: #ece7e7;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+      h1 {
+        font-size: 24px;
+        margin-top: 20px;
+      }
+      section {
+        padding: 40px 20px;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero {
+        background-color: #007bff;
+        color: white;
+      }
+      .features {
+        background-color: #f8f9fa;
+      }
+      .testimonials {
+        background-color: #e9ecef;
+      }
+      .cta {
+        background-color: #28a745;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Testing NowNowNow Widget</h1>
+
+    <section class="hero">
+      <h2>Welcome to Our Landing Page</h2>
+      <p>Experience the power of our amazing product!</p>
+    </section>
+
+    <section class="features">
+      <h2>Key Features</h2>
+      <ul>
+        <li>Innovative Design</li>
+        <li>User-Friendly Interface</li>
+        <li>Powerful Performance</li>
+      </ul>
+    </section>
+
+    <section class="testimonials">
+      <h2>What Our Customers Say</h2>
+      <blockquote>"This product changed my life!" - Jane Doe</blockquote>
+      <blockquote>
+        "I can't imagine working without it." - John Smith
+      </blockquote>
+    </section>
+
+    <section class="cta">
+      <h2>Ready to Get Started?</h2>
+      <button>Sign Up Now</button>
+    </section>
+
+    <script>
+      console.log("Before widget script");
+    </script>
+    <script
+      defer
+      src="http://localhost:5173/dist/now-widget.js"
+      data-user-id="ErOeaXjKcLJ"
+      data-token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJFck9lYVhqS2NMSiIsImlhdCI6MTczMDkxNDk3MSwiZXhwIjoxNzMzNTA2OTcxfQ.TGsyZ2qb731tTjy8jdgRwC3ghDXDyWfhrYnL7gTi6sk"
+      data-theme="dark"
+      data-position="left"
+      data-button-color="white"
+      data-button-size="90"
+    ></script>
+  </body>
+</html>
