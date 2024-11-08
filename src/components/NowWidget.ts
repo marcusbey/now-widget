@@ -5,11 +5,10 @@ import { fetchUserInfo, fetchUserPosts } from '../api/auth';
 import { initializeWidgetRoot, setLoading, setPosts, setUser } from '../state/state';
 import styles from '../styles/nowWidgetStyles.css?inline';
 import { addEventListeners } from '../utils/nowEventsUtils';
-import { applyTheme, setPosition } from '../utils/nowStyleUtils';
+import { applyTheme } from '../utils/nowStyleUtils';
 import {
   createWidgetContainer,
   handleError,
-  injectGlobalStyles,
   togglePanel
 } from '../utils/nowWidgetUtils';
 import { createNowButton } from './NowButton';
@@ -33,30 +32,25 @@ interface WidgetConfig {
  * @param config - Configuration object containing userId, token, theme, position, buttonColor, and buttonSize.
  */
 export const initializeNowWidget = async (config: WidgetConfig): Promise<void> => {
-  // Inject global styles
-  injectGlobalStyles();
-
-  // Create widget container and append to body
   const container = createWidgetContainer();
-
-  // Initialize widget root for state management
   initializeWidgetRoot(container);
-  setPosition();
 
-  // Create and append NowButton with updated onClick handler
+  // Create and append button
   const button = createNowButton(() => togglePanel(true, container), {
     color: config.buttonColor || '#007bff',
     size: config.buttonSize || 60,
     backgroundColor: 'transparent',
   });
-  document.body.appendChild(button);
+  container.appendChild(button);
 
-  // Create the panel once
-  const panel = createNowPanel({ userId: config.userId, token: config.token, posts: [], user: null });
+  // Create panel with mock data
+  const panel = createNowPanel({
+    userId: config.userId,
+    token: config.token,
+    posts: [],
+    user: null
+  });
   container.appendChild(panel);
-
-  // Set initial panel position
-  panel.style.left = `-${panel.offsetWidth}px`;
 
   // Append styles to the widget container
   const style = document.createElement('style');
@@ -95,5 +89,27 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
 
   // Apply theme and position settings
   applyTheme(config.theme);
-  setPosition();
+  // Add click event listener to close panel when clicking outside
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    if (!panel.contains(target) && !button.contains(target) && panel.classList.contains('open')) {
+      togglePanel(false, container);
+    }
+  });
+
+  // Handle scroll events
+  let scrollTimeout: NodeJS.Timeout;
+  document.addEventListener('scroll', () => {
+    if (!panel.contains(document.activeElement) && panel.classList.contains('open')) {
+      // Clear any existing timeout
+      clearTimeout(scrollTimeout);
+
+      // Set a new timeout to close the panel
+      scrollTimeout = setTimeout(() => {
+        togglePanel(false, container);
+      }, 150); // Small delay to make it feel smooth
+    }
+  }, { passive: true });
+
+  setLoading(false);
 };

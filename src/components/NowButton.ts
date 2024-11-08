@@ -24,16 +24,22 @@ export const createNowButton = (
   const button = document.createElement('button');
   button.id = 'now-widget-button';
   button.type = 'button';
-
-  // Apply styles
-  button.style.backgroundColor = backgroundColor;
-  button.style.border = 'none';
-  button.style.cursor = 'pointer';
-
-  // Set button size
-  button.style.width = `${size}px`;
-  button.style.height = `${size}px`;
-  button.style.borderRadius = '50%';
+  button.style.cssText = `
+    width: ${size}px;
+    height: ${size}px;
+    background-color: ${backgroundColor};
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+  `;
 
   const content = document.createElement('div');
   content.classList.add('now-widget-button-content');
@@ -84,5 +90,28 @@ export const createNowButton = (
     onClick();
   });
 
+  // Show button only on homepage within first 100vh
+  if (window.location.pathname === '/') {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          button.style.opacity = '1';
+          button.style.visibility = 'visible';
+        } else {
+          button.style.opacity = '0';
+          button.style.visibility = 'hidden';
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const sentinel = document.createElement('div');
+    sentinel.style.position = 'absolute';
+    sentinel.style.top = '100vh';
+    sentinel.style.width = '1px';
+    sentinel.style.height = '1px';
+    document.body.appendChild(sentinel);
+
+    observer.observe(sentinel);
+  }
   return button;
 };
