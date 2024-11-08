@@ -5,7 +5,7 @@ export default defineConfig({
     plugins: [cssInjectedByJsPlugin()],
     build: {
         lib: {
-            entry: 'src/lib/index.ts',
+            entry: 'src/index.ts',
             name: 'NowWidget',
             fileName: 'now-widget',
             formats: ['umd']

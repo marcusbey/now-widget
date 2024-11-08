@@ -8,6 +8,7 @@ import { getScriptAttributes } from './utils/nowWidgetUtils';
 const init = async (): Promise<void> => {
     console.log('init');
     const attributes = getScriptAttributes();
+    console.log('fron elemen to attibute', attributes);
     if (!attributes) return;
     const { userId, token, theme, position, buttonColor, buttonSize } = attributes;
 

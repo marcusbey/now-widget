@@ -32,9 +32,11 @@ interface WidgetConfig {
  * @param config - Configuration object containing userId, token, theme, position, buttonColor, and buttonSize.
  */
 export const initializeNowWidget = async (config: WidgetConfig): Promise<void> => {
+  console.log('Initializing Now Widget with config:', config);
   const container = createWidgetContainer();
+  console.log('Widget container created');
   initializeWidgetRoot(container);
-
+  console.log('Widget root initialized');
   // Create and append button
   const button = createNowButton(() => togglePanel(true, container), {
     color: config.buttonColor || '#007bff',

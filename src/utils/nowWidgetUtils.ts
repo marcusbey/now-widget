@@ -17,8 +17,6 @@ export const getScriptAttributes = (): {
 
     for (let i = 0; i < scripts.length; i++) {
         const script = scripts[i];
-
-        // Check if the script has the required data attributes
         if (script.getAttribute('data-user-id') && script.getAttribute('data-token')) {
             currentScript = script;
             break;
@@ -122,7 +120,7 @@ export const renderUserInfo = (user: User | null, panel: HTMLElement): void => {
     const userInfo = panel.querySelector('.now-widget-user-info');
     if (userInfo && user) {
         userInfo.innerHTML = `
-            <img src="${user.image || '/placeholder-user.jpg'}" alt="${user.displayName || user.name}" class="now-widget-avatar">
+            <img src="${user.image || '/placeholder-user.png'}" alt="${user.displayName || user.name}" class="now-widget-avatar">
             <div class="now-widget-user-details">
                 <h2 class="now-widget-user-name">${user.displayName || user.name}</h2>
                 <p class="now-widget-user-bio">${user.bio || ''}</p>

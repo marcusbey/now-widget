@@ -31,7 +31,7 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   avatarContainer.classList.add('now-widget-avatar-container');
 
   const avatar = document.createElement('img');
-  avatar.src = user?.image || '/placeholder-user.jpg';
+  avatar.src = user?.image || '/placeholder-user.png';
   avatar.alt = user?.displayName || user?.name || 'User';
   avatar.classList.add('now-widget-avatar');
   avatarContainer.appendChild(avatar);
@@ -140,7 +140,7 @@ export const updateNowPanel = (panel: HTMLElement, config: PanelConfig): void =>
     if (userBioEl) userBioEl.textContent = user.bio || '';
     if (userFollowersEl) userFollowersEl.textContent = `${user.followers || 0} followers`;
     if (avatarEl) {
-      avatarEl.src = user.image || '/placeholder-user.jpg';
+      avatarEl.src = user.image || '/placeholder-user.png';
       avatarEl.alt = user.displayName || user.name || 'User';
     }
   }

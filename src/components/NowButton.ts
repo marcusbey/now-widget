@@ -20,7 +20,6 @@ export const createNowButton = (
   options: ButtonOptions = {}
 ): HTMLElement => {
   const { color = '#007bff', size = 50, backgroundColor = 'transparent' } = options;
-
   const button = document.createElement('button');
   button.id = 'now-widget-button';
   button.type = 'button';
@@ -46,28 +45,24 @@ export const createNowButton = (
 
   const textRing = document.createElement('div');
   textRing.classList.add('text-ring');
-
   const nowText = "NOW.NOW.NOW.NOW.NOW.NOW.";
   nowText.split("").forEach((char, index) => {
     const charSpan = document.createElement('span');
     charSpan.classList.add('now-text');
     charSpan.textContent = char;
-    charSpan.style.position = 'absolute';
-    charSpan.style.top = '50%';
-    charSpan.style.left = '50%';
-    charSpan.style.transform = `
-            translate(-50%, -50%)
-            rotate(${(360 / nowText.length) * index}deg)
-            translateY(-4ch)
-        `;
-    charSpan.style.fontSize = '1.1rem';
-    charSpan.style.fontWeight = 'bold';
-    charSpan.style.background = `linear-gradient(45deg, ${color}, #FF4500)`;
-    charSpan.style.webkitBackgroundClip = 'text';
-    charSpan.style.webkitTextFillColor = 'transparent';
-    charSpan.style.backgroundClip = 'text';
-    charSpan.style.color = 'transparent';
-
+    charSpan.style.cssText = `
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(${(360 / nowText.length) * index}deg) translateY(-${size / 2 - 10}px);
+      font-size: ${size / 4}px;
+      font-weight: bold;
+      background: linear-gradient(45deg, ${color}, #FF4500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    `;
     textRing.appendChild(charSpan);
   });
 
@@ -91,13 +86,15 @@ export const createNowButton = (
   });
 
   // Show button only on homepage within first 100vh
-  if (window.location.pathname === '/') {
+  if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          console.log('here we are');
           button.style.opacity = '1';
           button.style.visibility = 'visible';
         } else {
+          console.log('i guess we are not here');
           button.style.opacity = '0';
           button.style.visibility = 'hidden';
         }
