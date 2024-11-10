@@ -69,6 +69,7 @@ describe('Authentication API', () => {
                     id: 'post1',
                     content: 'This is the first post.',
                     user: mockUser,
+                    createdAt: new Date('2024-03-15T10:00:00Z'),
                     _count: {
                         comments: 10,
                         bookmarks: 5,
@@ -79,6 +80,7 @@ describe('Authentication API', () => {
                     id: 'post2',
                     content: 'This is the second post.',
                     user: mockUser,
+                    createdAt: new Date('2024-03-15T11:00:00Z'),
                     _count: {
                         comments: 5,
                         bookmarks: 2,

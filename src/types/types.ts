@@ -33,6 +33,7 @@ export interface Post {
     user: User;
     attachments?: Attachment[];
     likes?: Like[];
+    createdAt: Date;
     bookmarks?: Bookmark[];
     comments?: Comment[];
     linkedNotifications?: Notification[];

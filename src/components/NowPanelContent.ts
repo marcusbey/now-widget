@@ -1,5 +1,6 @@
 import { Post, User } from '../types/types';
 import { togglePanel } from '../utils/nowWidgetUtils';
+import { createPostElement } from './NowPanelPost';
 
 interface PanelConfig {
   userId: string;
@@ -49,13 +50,29 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   userBio.classList.add('now-widget-user-bio');
   userBio.textContent = user?.bio || '';
 
-  const userFollowers = document.createElement('p');
-  userFollowers.classList.add('now-widget-user-followers');
-  userFollowers.textContent = `${user?.followers || 0} followers`;
+  const userStats = document.createElement('div');
+  userStats.classList.add('now-widget-user-stats');
+
+  const postsCount = document.createElement('span');
+  postsCount.classList.add('now-widget-stat');
+  postsCount.innerHTML = `<strong>${posts.length}</strong> posts`;
+
+  const followersCount = document.createElement('span');
+  followersCount.classList.add('now-widget-stat');
+  followersCount.innerHTML = `<strong>${user?.followers || 0}</strong> followers`;
+
+  const likesCount = document.createElement('span');
+  likesCount.classList.add('now-widget-stat');
+  const totalLikes = posts.reduce((sum, post) => sum + post._count.likes, 0);
+  likesCount.innerHTML = `<strong>${totalLikes}</strong> likes`;
+
+  userStats.appendChild(postsCount);
+  userStats.appendChild(followersCount);
+  userStats.appendChild(likesCount);
 
   userDetails.appendChild(userName);
   userDetails.appendChild(userBio);
-  userDetails.appendChild(userFollowers);
+  userDetails.appendChild(userStats);
 
   userInfo.appendChild(avatarContainer);
   userInfo.appendChild(userDetails);
@@ -81,33 +98,7 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   postsContainer.classList.add('now-widget-posts');
 
   posts.forEach(post => {
-    const postEl = document.createElement('div');
-    postEl.classList.add('now-widget-post');
-
-    const timestamp = document.createElement('div');
-    timestamp.classList.add('now-widget-post-timestamp');
-    timestamp.textContent = '2 hours ago';
-
-    const content = document.createElement('p');
-    content.classList.add('now-widget-post-content');
-    content.innerHTML = highlightHashtags(post.content);
-
-    const metrics = document.createElement('div');
-    metrics.classList.add('now-widget-post-metrics');
-
-    const comments = document.createElement('span');
-    comments.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> ${post._count.comments}`;
-
-    const likes = document.createElement('span');
-    likes.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> ${post._count.likes}`;
-
-    metrics.appendChild(comments);
-    metrics.appendChild(likes);
-
-    postEl.appendChild(timestamp);
-    postEl.appendChild(content);
-    postEl.appendChild(metrics);
-
+    const postEl = createPostElement(post);
     postsContainer.appendChild(postEl);
   });
 
@@ -115,8 +106,4 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   panel.appendChild(scrollArea);
 
   return panel;
-};
-
-const highlightHashtags = (content: string): string => {
-  return content.replace(/#(\w+)/g, '<a href="/hashtag/$1" class="now-widget-hashtag">#$1</a>');
 };

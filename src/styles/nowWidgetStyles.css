@@ -337,3 +337,141 @@ body.no-scroll {
     transform: rotate(360deg);
   }
 }
+
+/* Post Styles */
+.now-widget-post {
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--theme-post-bg);
+  border-radius: 1rem;
+  border: 1px solid var(--theme-border);
+  transition: transform 0.2s ease;
+}
+
+.now-widget-post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.now-widget-post-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.now-widget-post-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.now-widget-post-username {
+  font-weight: 500;
+  color: var(--theme-text);
+  display: block;
+}
+
+.now-widget-post-timestamp {
+  font-size: 0.875rem;
+  color: var(--theme-text-secondary);
+  display: block;
+}
+
+.now-widget-post-content {
+  margin: 0.75rem 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.now-widget-media-container {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin: 0.75rem 0;
+}
+
+.now-widget-media {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  max-height: 30rem;
+  object-fit: cover;
+}
+
+.now-widget-post-divider {
+  margin: 0.75rem 0;
+  border: 0;
+  border-top: 1px solid var(--theme-border);
+}
+
+.now-widget-post-metrics {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.now-widget-metrics-left {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.now-widget-metric-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--theme-text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.now-widget-metric-button:hover {
+  color: var(--theme-text);
+}
+
+.now-widget-comments-container {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--theme-border);
+}
+
+.now-widget-comment {
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background: var(--theme-background);
+  border-radius: 0.5rem;
+}
+
+.now-widget-comment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.now-widget-comment-avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.now-widget-comment-username {
+  font-weight: 500;
+  color: var(--theme-text);
+}
+
+.now-widget-comment-time {
+  font-size: 0.75rem;
+  color: var(--theme-text-secondary);
+}
+
+.now-widget-comment-content {
+  margin: 0;
+  color: var(--theme-text);
+  font-size: 0.875rem;
+}
