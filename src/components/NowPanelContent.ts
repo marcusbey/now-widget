@@ -1,3 +1,4 @@
+import { fetchUserPosts } from '../api/auth';
 import { Post, User } from '../types/types';
 import { togglePanel } from '../utils/nowWidgetUtils';
 import { createPostElement } from './NowPanelPost';
@@ -105,5 +106,36 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   scrollArea.appendChild(postsContainer);
   panel.appendChild(scrollArea);
 
+  // Add infinite scroll
+  addInfiniteScroll(scrollArea, config);
+
   return panel;
+};
+
+
+const addInfiniteScroll = (scrollArea: HTMLElement, config: PanelConfig) => {
+  let isLoading = false;
+  let currentPage = 1;
+
+  scrollArea.addEventListener('scroll', async () => {
+    const { scrollTop, scrollHeight, clientHeight } = scrollArea;
+
+    // If we're near the bottom (within 100px)
+    if (scrollHeight - scrollTop - clientHeight < 100 && !isLoading) {
+      isLoading = true;
+      currentPage++;
+
+      const newPosts = await fetchUserPosts(config.userId, config.token, currentPage);
+
+      if (newPosts.length > 0) {
+        const postsContainer = scrollArea.querySelector('.now-widget-posts');
+        newPosts.forEach(post => {
+          const postEl = createPostElement(post);
+          postsContainer?.appendChild(postEl);
+        });
+      }
+
+      isLoading = false;
+    }
+  });
 };

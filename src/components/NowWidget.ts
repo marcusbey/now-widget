@@ -96,3 +96,8 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
     setLoading(false);
   }
 };
+
+
+
+
+

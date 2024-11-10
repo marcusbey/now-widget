@@ -38,18 +38,26 @@ export const fetchUserInfo = async (userId: string, token: string): Promise<User
  * Fetches user posts.
  * @param userId - The ID of the user.
  * @param token - The authentication token.
+ * @param page - The page number to fetch.
+ * @param limit - The number of posts per page.
  * @returns A Promise that resolves to an array of Post objects.
  */
-export const fetchUserPosts = async (userId: string, token: string): Promise<Post[]> => {
+export const fetchUserPosts = async (
+    userId: string,
+    token: string,
+    page: number = 1,
+    limit: number = 50
+): Promise<Post[]> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/widget/user-posts?userId=${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            // Do not include 'mode: no-cors'
-        });
+        const response = await fetch(
+            `${API_BASE_URL}/api/widget/user-posts?userId=${userId}&page=${page}&limit=${limit}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
 
         if (response.status === 401) {
             throw new Error('Authentication failed. Please check your token.');
