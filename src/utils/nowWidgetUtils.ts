@@ -35,6 +35,15 @@ export const getScriptAttributes = (): {
     const buttonColor = currentScript.getAttribute('data-button-color');
     const buttonSize = currentScript.getAttribute('data-button-size');
 
+    console.log('Retrieved script attributes:', {
+        userId,
+        token,
+        theme,
+        position,
+        buttonColor,
+        buttonSize,
+    });
+
     if (!userId || !token) {
         console.error("NowWidget: Missing userId or token in script attributes.");
         return null;

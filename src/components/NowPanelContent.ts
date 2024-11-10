@@ -74,6 +74,7 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   // Scrollable content area
   const scrollArea = document.createElement('div');
   scrollArea.classList.add('now-widget-scroll-area');
+  scrollArea.id = 'now-widget-content';
 
   const postsContainer = document.createElement('div');
   postsContainer.classList.add('now-widget-posts');

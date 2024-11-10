@@ -86,29 +86,32 @@ export const createNowButton = (
   });
 
   // Show button only on homepage within first 100vh
-  if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          console.log('here we are');
-          button.style.opacity = '1';
-          button.style.visibility = 'visible';
-        } else {
-          console.log('i guess we are not here');
-          button.style.opacity = '0';
-          button.style.visibility = 'hidden';
-        }
-      });
-    }, { threshold: 0.5 });
+  // if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+  //   const observer = new IntersectionObserver((entries) => {
+  //     entries.forEach(entry => {
+  //       if (entry.isIntersecting) {
+  //         console.log('here we are');
+  //         button.style.opacity = '1';
+  //         button.style.visibility = 'visible';
+  //       } else {
+  //         console.log('i guess we are not here');
+  //         button.style.opacity = '0';
+  //         button.style.visibility = 'hidden';
+  //       }
+  //     });
+  //   }, { threshold: 0.5 });
 
-    const sentinel = document.createElement('div');
-    sentinel.style.position = 'absolute';
-    sentinel.style.top = '100vh';
-    sentinel.style.width = '1px';
-    sentinel.style.height = '1px';
-    document.body.appendChild(sentinel);
+  //   const sentinel = document.createElement('div');
+  //   sentinel.style.position = 'absolute';
+  //   sentinel.style.top = '100vh';
+  //   sentinel.style.width = '1px';
+  //   sentinel.style.height = '1px';
+  //   document.body.appendChild(sentinel);
 
-    observer.observe(sentinel);
-  }
+  //   observer.observe(sentinel);
+  // }
+  button.style.opacity = '1';
+  button.style.visibility = 'visible';
+  console.log('Button visibility manually set to visible');
   return button;
 };
