@@ -61,7 +61,11 @@
 
 #now-widget-button.panel-open {
   transform: translateX(var(--panel-width));
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -92,6 +96,7 @@
   height: 100%;
   position: relative;
   animation: spin 60s linear infinite;
+  animation-direction: normal;
 }
 
 .now-text {
@@ -99,6 +104,17 @@
   transform-origin: center;
   font-weight: bold;
 }
+
+.fast-spin {
+  animation: spin 1s linear infinite;
+  animation-direction: normal;
+}
+
+.slow-spin {
+  animation: spin 5s linear infinite;
+  animation-direction: normal;
+}
+
 /* Panel Styles */
 .now-widget-panel {
   position: fixed;
@@ -277,14 +293,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.fast-spin {
-  animation: spin 1s linear infinite;
-}
-
-.slow-spin {
-  animation: spin 5s linear infinite;
 }
 
 /* Overlay */
