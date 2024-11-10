@@ -1,5 +1,4 @@
-import { Post, User } from '../types/types';
-
+// import { Post, User } from '../types/types';
 /**
  * Retrieves script attributes from the currently executing script tag.
  * @returns An object containing userId, token, and optional configuration parameters, or null if required attributes are missing.
@@ -120,113 +119,113 @@ export const togglePanel = (isOpen: boolean, root: Element): void => {
         }
     }
 };
-/**
- * Displays user information inside the widget panel.
- * @param user - The User object containing user information.
- * @param panel - The widget panel HTMLElement.
- */
-export const renderUserInfo = (user: User | null, panel: HTMLElement): void => {
-    const userInfo = panel.querySelector('.now-widget-user-info');
-    if (userInfo && user) {
-        userInfo.innerHTML = `
-            <img src="${user.image || '/placeholder-user.png'}" alt="${user.displayName || user.name}" class="now-widget-avatar">
-            <div class="now-widget-user-details">
-                <h2 class="now-widget-user-name">${user.displayName || user.name}</h2>
-                <p class="now-widget-user-bio">${user.bio || ''}</p>
-            </div>
-        `;
-    }
-};
+// /**
+//  * Displays user information inside the widget panel.
+//  * @param user - The User object containing user information.
+//  * @param panel - The widget panel HTMLElement.
+//  */
+// export const renderUserInfo = (user: User | null, panel: HTMLElement): void => {
+//     const userInfo = panel.querySelector('.now-widget-user-info');
+//     if (userInfo && user) {
+//         userInfo.innerHTML = `
+//             <img src="${user.image || '/placeholder-user.png'}" alt="${user.displayName || user.name}" class="now-widget-avatar">
+//             <div class="now-widget-user-details">
+//                 <h2 class="now-widget-user-name">${user.displayName || user.name}</h2>
+//                 <p class="now-widget-user-bio">${user.bio || ''}</p>
+//             </div>
+//         `;
+//     }
+// };
 
-/**
- * Renders posts inside the widget panel.
- * @param posts - An array of Post objects.
- * @param panel - The widget panel HTMLElement.
- */
-export const renderPostsInPanel = (posts: Post[], panel: HTMLElement): void => {
-    const content = panel.querySelector('#now-widget-content');
-    if (content) {
-        content.innerHTML = '<h2>Your Posts</h2>';
-        posts.forEach(post => {
-            const postEl = document.createElement('div');
-            postEl.className = 'now-widget-post';
-            postEl.innerHTML = `<p>${post.content}</p>`;
-            content.appendChild(postEl);
-        });
-    } else {
-        console.error('Content element not found in the panel');
-    }
-};
+// /**
+//  * Renders posts inside the widget panel.
+//  * @param posts - An array of Post objects.
+//  * @param panel - The widget panel HTMLElement.
+//  */
+// export const renderPostsInPanel = (posts: Post[], panel: HTMLElement): void => {
+//     const content = panel.querySelector('#now-widget-content');
+//     if (content) {
+//         content.innerHTML = '<h2>Your Posts</h2>';
+//         posts.forEach(post => {
+//             const postEl = document.createElement('div');
+//             postEl.className = 'now-widget-post';
+//             postEl.innerHTML = `<p>${post.content}</p>`;
+//             content.appendChild(postEl);
+//         });
+//     } else {
+//         console.error('Content element not found in the panel');
+//     }
+// };
 
-/**
- * Displays an error message inside the widget panel.
- * @param error - The error message to display.
- */
-export const displayError = (error: string, panel: HTMLElement): void => {
-    const errorDiv = document.createElement('div');
-    errorDiv.classList.add('now-widget-error');
-    errorDiv.textContent = `Error: ${error}`;
-    panel.appendChild(errorDiv);
-};
+// /**
+//  * Displays an error message inside the widget panel.
+//  * @param error - The error message to display.
+//  */
+// export const displayError = (error: string, panel: HTMLElement): void => {
+//     const errorDiv = document.createElement('div');
+//     errorDiv.classList.add('now-widget-error');
+//     errorDiv.textContent = `Error: ${error}`;
+//     panel.appendChild(errorDiv);
+// };
 
-/**
- * Handles errors by displaying them in the panel.
- * @param message - The error message to display.
- * @param panel - The panel HTMLElement where the error should be displayed.
- */
-export const handleError = (message: string, panel: HTMLElement): void => {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'now-widget-error';
-    errorDiv.textContent = `Error: ${message}`;
-    panel.appendChild(errorDiv);
-};
+// /**
+//  * Handles errors by displaying them in the panel.
+//  * @param message - The error message to display.
+//  * @param panel - The panel HTMLElement where the error should be displayed.
+//  */
+// export const handleError = (message: string, panel: HTMLElement): void => {
+//     const errorDiv = document.createElement('div');
+//     errorDiv.className = 'now-widget-error';
+//     errorDiv.textContent = `Error: ${message}`;
+//     panel.appendChild(errorDiv);
+// };
 
 
-export const createShadowContainer = (): ShadowRoot => {
-    const container = document.createElement('div');
-    const shadow = container.attachShadow({ mode: 'open' });
-    document.body.appendChild(container);
-    return shadow;
-};
+// export const createShadowContainer = (): ShadowRoot => {
+//     const container = document.createElement('div');
+//     const shadow = container.attachShadow({ mode: 'open' });
+//     document.body.appendChild(container);
+//     return shadow;
+// };
 
-export const wrapHostContent = (): void => {
-    const body = document.body;
-    const wrapper = document.createElement('div');
-    wrapper.id = 'now-widget-host-content';
+// export const wrapHostContent = (): void => {
+//     const body = document.body;
+//     const wrapper = document.createElement('div');
+//     wrapper.id = 'now-widget-host-content';
 
-    // Move existing body children into the wrapper
-    while (body.firstChild) {
-        wrapper.appendChild(body.firstChild);
-    }
+//     // Move existing body children into the wrapper
+//     while (body.firstChild) {
+//         wrapper.appendChild(body.firstChild);
+//     }
 
-    body.appendChild(wrapper);
-};
+//     body.appendChild(wrapper);
+// };
 
-export const injectGlobalStyles = (): void => {
-    const style = document.createElement('style');
-    style.textContent = `
-        /* Host content container */
-        #now-widget-host-content {
-            transition: margin-left 0.3s ease;
-        }
+// export const injectGlobalStyles = (): void => {
+//     const style = document.createElement('style');
+//     style.textContent = `
+//         /* Host content container */
+//         #now-widget-host-content {
+//             transition: margin-left 0.3s ease;
+//         }
 
-        /* When panel is open, push content to the right */
-        #now-widget-host-content.panel-open {
-            margin-left: 30vw;
-        }
+//         /* When panel is open, push content to the right */
+//         #now-widget-host-content.panel-open {
+//             margin-left: 30vw;
+//         }
 
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            #now-widget-host-content.panel-open {
-                margin-left: 50vw;
-            }
-        }
+//         /* Responsive adjustments */
+//         @media (max-width: 1200px) {
+//             #now-widget-host-content.panel-open {
+//                 margin-left: 50vw;
+//             }
+//         }
 
-        @media (max-width: 768px) {
-            #now-widget-host-content.panel-open {
-                margin-left: 80vw;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-};
+//         @media (max-width: 768px) {
+//             #now-widget-host-content.panel-open {
+//                 margin-left: 80vw;
+//             }
+//         }
+//     `;
+//     document.head.appendChild(style);
+// };

@@ -7,29 +7,10 @@
   --theme-color: #000000;
 }
 
-.dark-theme {
-  --theme-background: #333333;
-  --theme-color: #ffffff;
-}
-
-.hidden {
-  display: none;
-}
-
-/* Animations */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Page Element Styles */
+/* Host Content Styles */
 #now-widget-host-content {
   position: relative;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease;
   min-height: 100vh;
 }
 
@@ -37,28 +18,24 @@
   transform: translateX(var(--panel-width));
 }
 
-
 /* Button Styles */
 #now-widget-button {
-  background-color: var(--button-color);
+  position: fixed;
+  bottom: 40px;
+  left: 40px;
   width: var(--button-size);
   height: var(--button-size);
-  color: white;
-  border: none;
   border-radius: 50%;
+  background: transparent;
+  border: none;
   cursor: pointer;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10001;
   transition: transform 0.3s ease;
 }
 
 #now-widget-button.panel-open {
   transform: translateX(var(--panel-width));
 }
-
 
 .text-ring {
   width: 100%;
