@@ -79,7 +79,6 @@ NowWidget-vanilla-ts is a lightweight, versatile widget designed to seamlessly d
   - data-theme: Choose between 'light' or 'dark' themes.
   - data-position: Set the position of the widget button (e.g., 'left' or 'right').
   - data-button-color: Define the button's color using HEX codes.
-  - data-button-size: Specify the button's size in pixels.
 - Responsive Design: Ensures the widget looks and functions beautifully across various devices and screen sizes.
 
 ## Installation & Setup
@@ -128,7 +127,6 @@ Embed the widget into your website by adding the following script tag to your HT
   data-theme="dark"
   data-position="left"
   data-button-color="white"
-  data-button-size="90"
 ></script>
 ```
 

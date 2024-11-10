@@ -37,7 +37,6 @@ describe('Widget Utilities', () => {
             script.setAttribute('data-theme', 'dark');
             script.setAttribute('data-position', 'left');
             script.setAttribute('data-button-color', '#ff0000');
-            script.setAttribute('data-button-size', '80');
             document.body.appendChild(script);
 
             const result = getScriptAttributes();
@@ -47,7 +46,6 @@ describe('Widget Utilities', () => {
                 theme: 'dark',
                 position: 'left',
                 buttonColor: '#ff0000',
-                buttonSize: '80',
             });
         });
     });

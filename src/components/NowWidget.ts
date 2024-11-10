@@ -1,6 +1,7 @@
 // Start of Selection
 import { fetchUserInfo, fetchUserPosts } from '../api/auth';
 import { initializeWidgetRoot, setLoading, setPosts, setUser } from '../state/state';
+import { injectStyles } from '../utils/nowStyleUtils';
 import { createWidgetContainer, togglePanel } from '../utils/nowWidgetUtils';
 import { stopPinging } from '../utils/pingServer';
 import { createNowButton } from './NowButton';
@@ -12,7 +13,6 @@ interface WidgetConfig {
   theme?: string;
   position?: string;
   buttonColor?: string;
-  buttonSize?: number;
 }
 
 let scrollListener: EventListener;
@@ -32,10 +32,17 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
   const container = createWidgetContainer();
   initializeWidgetRoot(container);
 
+  // Inject dynamic styles
+  injectStyles(
+    config.theme as 'light' | 'dark' || 'dark',
+    config.position as 'left' | 'right' || 'left',
+    config.buttonColor
+  );
+
   // Create and append button
   const button = createNowButton(() => togglePanel(true, container), {
     color: config.buttonColor || '#007bff',
-    size: config.buttonSize || 60,
+    size: 120,
     backgroundColor: 'transparent',
   });
   container.appendChild(button);

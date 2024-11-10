@@ -26,7 +26,6 @@ export interface ScriptAttributes {
     theme?: string;
     position?: string;
     buttonColor?: string;
-    buttonSize?: string;
 }
 
 export interface Post {

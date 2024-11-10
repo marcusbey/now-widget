@@ -9,7 +9,6 @@ export const getScriptAttributes = (): {
     theme?: string;
     position?: string;
     buttonColor?: string;
-    buttonSize?: string;
 } | null => {
     const scripts = document.getElementsByTagName('script');
     let currentScript: HTMLScriptElement | null = null;
@@ -32,7 +31,6 @@ export const getScriptAttributes = (): {
     const theme = currentScript.getAttribute('data-theme');
     const position = currentScript.getAttribute('data-position');
     const buttonColor = currentScript.getAttribute('data-button-color');
-    const buttonSize = currentScript.getAttribute('data-button-size');
 
     console.log('Retrieved script attributes:', {
         userId,
@@ -40,7 +38,6 @@ export const getScriptAttributes = (): {
         theme,
         position,
         buttonColor,
-        buttonSize,
     });
 
     if (!userId || !token) {
@@ -54,7 +51,6 @@ export const getScriptAttributes = (): {
         theme: theme ?? undefined,
         position: position ?? undefined,
         buttonColor: buttonColor ?? undefined,
-        buttonSize: buttonSize ?? undefined,
     };
 };
 

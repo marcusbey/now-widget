@@ -14,7 +14,7 @@ const init = async (): Promise<void> => {
     const attributes = getScriptAttributes();
     console.log('Retrieved attributes:', attributes);
     if (!attributes) return;
-    const { userId, token, theme, position, buttonColor, buttonSize } = attributes;
+    const { userId, token, theme, position, buttonColor } = attributes;
 
     // Initialize the widget with the fetched configuration
     await initializeNowWidget({
@@ -23,7 +23,6 @@ const init = async (): Promise<void> => {
         theme,
         position,
         buttonColor,
-        buttonSize: buttonSize ? parseInt(buttonSize) : undefined,
     });
 
     // Start pinging the server

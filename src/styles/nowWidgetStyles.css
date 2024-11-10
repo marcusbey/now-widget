@@ -1,20 +1,10 @@
 /* Global Styles */
 :root {
-  --button-color: #fff;
-  --button-size: 60px;
+  --button-size: 120px;
   --panel-width: 400px;
-  --theme-background: #1c1c1c;
-  --theme-text: #ffffff;
-  --theme-text-secondary: #a0a0a0;
-  --theme-border: #333333;
-  --theme-hover: #2a2a2a;
-  --theme-post-bg: #242424;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: dark;
-  color: var(--theme-text);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -48,8 +38,8 @@
 /* Button Styles */
 #now-widget-button {
   position: fixed;
-  bottom: 40px;
-  left: 40px;
+  bottom: 80px;
+  left: 80px;
   width: var(--button-size);
   height: var(--button-size);
   border-radius: 50%;
@@ -57,17 +47,12 @@
   border: none;
   cursor: pointer;
   z-index: 10001;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 1;
 }
 
 #now-widget-button.panel-open {
-  transform: translateX(var(--panel-width));
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transform: translate(calc(var(--panel-width) - 40px));
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -76,9 +61,6 @@
 #now-widget-button.hidden {
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
 }
 
 /* Nested Element for Scaling */
@@ -128,8 +110,9 @@
   width: var(--panel-width);
   height: 100vh;
   background: var(--theme-background);
-  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   z-index: 10000;
   transform: translateX(-100%);
   display: flex;
@@ -138,6 +121,7 @@
 
 .now-widget-panel.open {
   transform: translateX(0);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 /* Panel Header */
