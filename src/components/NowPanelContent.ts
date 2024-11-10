@@ -19,7 +19,9 @@ export const createNowPanel = (config: PanelConfig): HTMLElement => {
   panel.addEventListener('click', (e) => {
     e.stopPropagation();
   });
-
+  panel.addEventListener('wheel', (e) => {
+    e.stopPropagation();
+  });
   // Header with user info (fixed)
   const header = document.createElement('div');
   header.classList.add('now-widget-header');

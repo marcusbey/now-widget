@@ -5,6 +5,29 @@
   --panel-width: 400px;
   --theme-background: #ffffff;
   --theme-color: #000000;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Flexible Container */
+.container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
 }
 
 /* Host Content Styles */
@@ -26,15 +49,26 @@
   width: var(--button-size);
   height: var(--button-size);
   border-radius: 50%;
-  background: transparent;
+  background: var(--button-color, transparent);
   border: none;
   cursor: pointer;
   z-index: 10001;
-  transition: transform 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 #now-widget-button.panel-open {
   transform: translateX(var(--panel-width));
+}
+
+#now-widget-button.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 .text-ring {
@@ -44,14 +78,22 @@
   animation: spin 60s linear infinite;
 }
 
+.now-widget-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
 .now-text {
   position: absolute;
   transform-origin: center;
-  font-size: 1.1rem;
   font-weight: bold;
-  pointer-events: none;
 }
-
 /* Panel Styles */
 .now-widget-panel {
   position: fixed;
@@ -174,12 +216,14 @@
   border-radius: 8px;
   background: #f8f9fa;
   border: 1px solid #eee;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .now-widget-post:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .now-widget-post-timestamp {
@@ -222,8 +266,12 @@
 
 /* Animations */
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .fast-spin {
@@ -241,10 +289,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
   z-index: 9999;
 }
 
@@ -253,9 +304,31 @@
   visibility: visible;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  :root {
-    --panel-width: 320px;
+body.no-scroll {
+  overflow: hidden;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(5vw, -5vh) scale(1.05);
+  }
+  50% {
+    transform: translate(10vw, 0) scale(1);
+  }
+  75% {
+    transform: translate(5vw, 5vh) scale(1.05);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -1,111 +1,270 @@
-interface ButtonOptions {
-  color?: string;
+interface NowButtonOptions {
   size?: number;
+  maxSize?: number;
+  minSize?: number;
+  color?: string;
   backgroundColor?: string;
+  onClick?: () => void;
 }
-/**
- * Creates the NowWidget button element.
- * @param onClick - Callback function to execute on button click.
- * @param options - Configuration object containing button color, size, and background color.
- * @returns The NowWidget button HTMLElement.
- */
-export const createNowButton = (
-  onClick: () => void,
-  options: ButtonOptions = {}
-): HTMLElement => {
-  const { color = '#007bff', size = 50, backgroundColor = 'transparent' } = options;
 
-  const button = document.createElement('button');
-  button.id = 'now-widget-button';
-  button.type = 'button';
-  button.style.cssText = `
-    width: ${size}px;
-    height: ${size}px;
-    background-color: ${backgroundColor};
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-    opacity: 0;
-    visibility: hidden;
-  `;
+export class NowButton {
+  private button: HTMLButtonElement;
+  private textContainer: HTMLDivElement;
+  private arrowIcon: HTMLDivElement;
+  private isHovered: boolean = false;
+  private animationDuration: number = 15;
+  private maxSize: number = 150;
+  private minSize: number = 80;
+  private currentSize: number;
+  private color: string;
+  private text = "NOW . NOW . NOW . ";
+  private resizeObserver!: ResizeObserver;
 
-  // Show button only when scrolled to hero section
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        button.style.opacity = '1';
-        button.style.visibility = 'visible';
-      } else {
-        button.style.opacity = '0';
-        button.style.visibility = 'hidden';
-      }
-    });
-  }, { threshold: 0.5 });
+  constructor(container: HTMLElement, options: NowButtonOptions = {}) {
+    if (options.size) {
+      this.maxSize = options.size;
+      this.minSize = options.size;
+    } else {
+      this.maxSize = options.maxSize ?? this.maxSize;
+      this.minSize = options.minSize ?? this.minSize;
+    }
+    this.color = options.color ?? '#ffffff';
+    this.currentSize = this.calculateSize();
 
-  // Observe the hero section
-  const heroSection = document.querySelector('.hero');
-  if (heroSection) {
-    observer.observe(heroSection);
+    this.button = this.createButton(options);
+    this.textContainer = this.createTextContainer();
+    this.arrowIcon = this.createArrowIcon();
+
+    this.button.appendChild(this.textContainer);
+    this.button.appendChild(this.arrowIcon);
+    container.appendChild(this.button);
+
+    this.setupEventListeners(options.onClick);
+    this.setupResizeObserver();
+    this.setupVisibilityObserver();
   }
 
-  const textRing = document.createElement('div');
-  textRing.classList.add('text-ring');
-  textRing.style.cssText = `
-    width: 100%;
-    height: 100%;
-    position: relative;
-    animation: spin 60s linear infinite;
-  `;
+  private calculateSize(): number {
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const screenSize = Math.min(vw, vh);
+    const size = Math.min(Math.max(screenSize * 0.15, this.minSize), this.maxSize);
+    return Math.round(size);
+  }
 
-  const nowText = "NOW.NOW.NOW.NOW.NOW.NOW.";
-  nowText.split("").forEach((char, index) => {
-    const charSpan = document.createElement('span');
-    charSpan.classList.add('now-text');
-    charSpan.textContent = char;
-    charSpan.style.cssText = `
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(${(360 / nowText.length) * index}deg) translateY(-${size / 2 - 10}px);
-      font-size: ${size / 4}px;
-      font-weight: bold;
-      background: linear-gradient(45deg, ${color}, #FF4500);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      color: transparent;
+  private createButton(options: NowButtonOptions): HTMLButtonElement {
+    const button = document.createElement('button');
+    button.id = 'now-widget-button';
+    this.updateButtonStyles(button, options.backgroundColor);
+    return button;
+  }
+
+  private updateButtonStyles(button: HTMLButtonElement, backgroundColor?: string): void {
+    button.style.cssText = `
+      width: ${this.currentSize}px;
+      height: ${this.currentSize}px;
+      background-color: ${backgroundColor ?? 'rgba(255, 255, 255, 0.1)'};
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      cursor: pointer;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 32px rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      transform: scale(1);
+      opacity: 1;
+      z-index: 1000;
     `;
-    textRing.appendChild(charSpan);
-  });
+  }
 
-  button.appendChild(textRing);
+  private createTextContainer(): HTMLDivElement {
+    const container = document.createElement('div');
+    container.className = 'text-ring';
+    container.style.cssText = `
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      animation: spin ${this.animationDuration}s linear infinite;
+      transition: animation-duration 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    `;
 
-  // Event listeners
-  button.addEventListener('mouseenter', () => {
-    textRing.style.animation = 'spin 1s linear infinite';
-  });
+    this.updateTextElements(container);
+    return container;
+  }
 
-  button.addEventListener('mouseleave', () => {
-    textRing.style.animation = 'spin 60s linear infinite';
-  });
+  private updateTextElements(container: HTMLDivElement): void {
+    container.innerHTML = '';
+    const chars = this.text.split('');
+    chars.forEach((char, index) => {
+      const span = document.createElement('span');
+      span.className = 'now-text';
+      span.textContent = char;
+      span.style.cssText = `
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        font-size: ${this.currentSize / 8}px;
+        font-weight: bold;
+        color: ${this.color};
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transform: translate(-50%, -50%) rotate(${(360 / chars.length) * index}deg) translateY(-${this.currentSize / 2 - this.currentSize / 8}px);
+        transform-origin: center;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 1;
+      `;
+      container.appendChild(span);
+    });
+  }
 
-  button.addEventListener('click', onClick);
+  private createArrowIcon(): HTMLDivElement {
+    const arrow = document.createElement('div');
+    arrow.innerHTML =
+      '<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
+    this.updateArrowStyles(arrow);
+    return arrow;
+  }
 
-  // Add keyframes for spin animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+  private updateArrowStyles(arrow: HTMLDivElement): void {
+    arrow.style.cssText = `
+      width: ${this.currentSize * 0.3}px;
+      height: ${this.currentSize * 0.3}px;
+      color: ${this.color};
+      z-index: 1;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(1);
+      opacity: 0.9;
+    `;
+  }
+
+  private setupEventListeners(onClick?: () => void) {
+    if (onClick) {
+      this.button.addEventListener('click', () => {
+        onClick();
+        this.button.classList.toggle('panel-open');
+        document.getElementById('now-widget-host-content')?.classList.toggle('panel-open');
+      });
     }
-  `;
-  document.head.appendChild(style);
 
-  return button;
+    // Touch events for mobile
+    this.button.addEventListener('touchstart', () => {
+      this.isHovered = true;
+      this.updateStyles(true);
+    });
+
+    this.button.addEventListener('touchend', () => {
+      this.isHovered = false;
+      this.updateStyles(false);
+    });
+
+    // Mouse events for desktop
+    this.button.addEventListener('mouseenter', () => {
+      this.isHovered = true;
+      this.animationDuration = 30;
+      this.updateStyles(true);
+    });
+
+    this.button.addEventListener('mouseleave', () => {
+      this.isHovered = false;
+      this.animationDuration = 15;
+      this.updateStyles(false);
+    });
+
+    // Mouse proximity effect (desktop only)
+    const isTouchDevice = 'ontouchstart' in window;
+    if (!isTouchDevice) {
+      document.addEventListener('mousemove', (e) => {
+        const rect = this.button.getBoundingClientRect();
+        const buttonCenterX = rect.left + rect.width / 2;
+        const buttonCenterY = rect.top + rect.height / 2;
+
+        const distance = Math.sqrt(
+          Math.pow(e.clientX - buttonCenterX, 2) + Math.pow(e.clientY - buttonCenterY, 2)
+        );
+
+        const proximityThreshold = this.currentSize * 2;
+
+        if (distance < proximityThreshold && !this.isHovered) {
+          const speedFactor = 1 - distance / proximityThreshold;
+          const newDuration = 15 - 7.5 * speedFactor;
+          if (Math.abs(this.animationDuration - newDuration) > 0.1) {
+            this.animationDuration = newDuration;
+            this.textContainer.style.animationDuration = `${this.animationDuration}s`;
+          }
+        } else if (!this.isHovered) {
+          if (Math.abs(this.animationDuration - 15) > 0.1) {
+            this.animationDuration = 15;
+            this.textContainer.style.animationDuration = '15s';
+          }
+        }
+      });
+    }
+  }
+
+  private setupResizeObserver(): void {
+    this.resizeObserver = new ResizeObserver(() => {
+      const newSize = this.calculateSize();
+      if (newSize !== this.currentSize) {
+        this.currentSize = newSize;
+        this.updateButtonStyles(this.button);
+        this.updateTextElements(this.textContainer);
+        this.updateArrowStyles(this.arrowIcon);
+      }
+    });
+
+    this.resizeObserver.observe(document.body);
+  }
+
+  private setupVisibilityObserver(): void {
+    const sentinel = document.createElement('div');
+    sentinel.style.position = 'absolute';
+    sentinel.style.top = '100vh';
+    sentinel.style.width = '1px';
+    sentinel.style.height = '1px';
+    document.body.appendChild(sentinel);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.button.style.opacity = '1';
+          } else {
+            this.button.style.opacity = '0';
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+  }
+
+  private updateStyles(isHovered: boolean) {
+    this.button.style.transform = isHovered ? 'scale(1.1)' : 'scale(1)';
+    this.arrowIcon.style.transform = isHovered ? 'scale(1.2)' : 'scale(1)';
+    this.arrowIcon.style.opacity = isHovered ? '1' : '0.9';
+
+    Array.from(this.textContainer.children).forEach((child) => {
+      (child as HTMLElement).style.opacity = isHovered ? '0.8' : '1';
+    });
+
+    this.textContainer.style.animationDuration = `${this.animationDuration}s`;
+  }
+}
+
+export const createNowButton = (
+  onClick: () => void,
+  options: NowButtonOptions = {}
+): HTMLElement => {
+  const container = document.createElement('div');
+  new NowButton(container, { ...options, onClick });
+  return container.querySelector('button')!;
 };

@@ -12,6 +12,7 @@ export default defineConfig({
         },
         rollupOptions: {
             output: {
+                banner: '/*! MIT License. Copyright 2024 Romain BOBOE <rboboe@base32.tech>. See LICENSE.txt. */',
                 assetFileNames: 'now-widget.[ext]',
                 entryFileNames: 'now-widget.js',
                 chunkFileNames: 'now-widget-[name].js'
