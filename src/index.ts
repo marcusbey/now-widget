@@ -1,14 +1,18 @@
 import { initializeNowWidget } from './components/NowWidget';
 import './styles/nowWidgetStyles.css';
 import { getScriptAttributes } from './utils/nowWidgetUtils';
+import { pingServer } from './utils/pingServer';
 
 /**
  * Initializes the NowWidget by fetching script attributes and setting up the widget.
  */
 const init = async (): Promise<void> => {
-    console.log('init');
+    if (document.getElementById('now-widget-container')) {
+        console.log('Widget already initialized.');
+        return;
+    }
     const attributes = getScriptAttributes();
-    console.log('fron elemen to attibute', attributes);
+    console.log('Retrieved attributes:', attributes);
     if (!attributes) return;
     const { userId, token, theme, position, buttonColor, buttonSize } = attributes;
 
@@ -21,6 +25,9 @@ const init = async (): Promise<void> => {
         buttonColor,
         buttonSize: buttonSize ? parseInt(buttonSize) : undefined,
     });
+
+    // Start pinging the server
+    pingServer();
 };
 
 // Initialize the widget when the DOM is fully loaded

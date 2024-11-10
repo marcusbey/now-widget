@@ -2,6 +2,7 @@
 import { fetchUserInfo, fetchUserPosts } from '../api/auth';
 import { initializeWidgetRoot, setLoading, setPosts, setUser } from '../state/state';
 import { createWidgetContainer, togglePanel } from '../utils/nowWidgetUtils';
+import { stopPinging } from '../utils/pingServer';
 import { createNowButton } from './NowButton';
 import { createNowPanel } from './NowPanelContent';
 
@@ -13,6 +14,19 @@ interface WidgetConfig {
   buttonColor?: string;
   buttonSize?: number;
 }
+
+let scrollListener: EventListener;
+let clickListener: EventListener;
+
+export const teardownNowWidget = () => {
+  const container = document.getElementById('now-widget-container');
+  if (container) {
+    container.remove();
+  }
+  stopPinging();
+  document.removeEventListener('scroll', scrollListener);
+  document.removeEventListener('click', clickListener);
+};
 
 export const initializeNowWidget = async (config: WidgetConfig): Promise<void> => {
   const container = createWidgetContainer();
@@ -50,26 +64,25 @@ export const initializeNowWidget = async (config: WidgetConfig): Promise<void> =
     container.appendChild(panel);
 
     // Add click event listener to close panel when clicking outside
-    document.addEventListener('click', (event) => {
+    clickListener = (event: Event) => {
       const target = event.target as HTMLElement;
       if (!panel.contains(target) && !button.contains(target) && panel.classList.contains('open')) {
         togglePanel(false, container);
       }
-    });
+    };
+    document.addEventListener('click', clickListener);
 
     // Handle scroll events
     let scrollTimeout: NodeJS.Timeout;
-    document.addEventListener('scroll', () => {
+    scrollListener = () => {
       if (!panel.contains(document.activeElement) && panel.classList.contains('open')) {
-        // Clear any existing timeout
         clearTimeout(scrollTimeout);
-
-        // Set a new timeout to close the panel
         scrollTimeout = setTimeout(() => {
           togglePanel(false, container);
-        }, 150); // Small delay to make it feel smooth
+        }, 150);
       }
-    }, { passive: true });
+    };
+    document.addEventListener('scroll', scrollListener, { passive: true });
   } catch (error) {
     console.error('Error initializing widget:', error);
   } finally {
