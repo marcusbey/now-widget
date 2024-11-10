@@ -55,12 +55,14 @@
   z-index: 10001;
   transition:
     transform 0.3s ease,
-    opacity 0.3s ease,
-    visibility 0.3s ease;
+    opacity 0.3s ease; /* Add opacity to transition */
+  opacity: 1;
 }
 
 #now-widget-button.panel-open {
   transform: translateX(var(--panel-width));
+  opacity: 0;
+  pointer-events: none;
 }
 
 #now-widget-button.hidden {
@@ -71,22 +73,25 @@
     visibility 0.3s ease;
 }
 
+/* Nested Element for Scaling */
+#now-widget-button .button-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+#now-widget-button.hovered .button-content {
+  transform: scale(1.1);
+}
+
 .text-ring {
   width: 100%;
   height: 100%;
   position: relative;
   animation: spin 60s linear infinite;
-}
-
-.now-widget-button {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
 }
 
 .now-text {

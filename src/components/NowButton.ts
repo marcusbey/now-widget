@@ -9,6 +9,7 @@ interface NowButtonOptions {
 
 export class NowButton {
   private button: HTMLButtonElement;
+  private buttonContent: HTMLDivElement;
   private textContainer: HTMLDivElement;
   private arrowIcon: HTMLDivElement;
   private isHovered: boolean = false;
@@ -32,11 +33,13 @@ export class NowButton {
     this.currentSize = this.calculateSize();
 
     this.button = this.createButton(options);
+    this.buttonContent = this.createButtonContent();
     this.textContainer = this.createTextContainer();
     this.arrowIcon = this.createArrowIcon();
 
-    this.button.appendChild(this.textContainer);
-    this.button.appendChild(this.arrowIcon);
+    this.button.appendChild(this.buttonContent);
+    this.buttonContent.appendChild(this.textContainer);
+    this.buttonContent.appendChild(this.arrowIcon);
     container.appendChild(this.button);
 
     this.setupEventListeners(options.onClick);
@@ -59,17 +62,32 @@ export class NowButton {
     return button;
   }
 
+  private createButtonContent(): HTMLDivElement {
+    const content = document.createElement('div');
+    content.className = 'button-content';
+    content.style.cssText = `
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    `;
+    return content;
+  }
+
   private updateButtonStyles(button: HTMLButtonElement, backgroundColor?: string): void {
     button.style.cssText = `
-      width: ${this.currentSize}px;
-      height: ${this.currentSize}px;
+      width: clamp(40px, 15vw, ${this.currentSize}px);
+      height: clamp(40px, 15vw, ${this.currentSize}px);
       background-color: ${backgroundColor ?? 'rgba(255, 255, 255, 0.1)'};
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       cursor: pointer;
       position: fixed;
-      bottom: 20px;
-      left: 20px;
+      bottom: clamp(10px, 3vh, 20px);
+      left: clamp(10px, 3vw, 20px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -77,9 +95,8 @@ export class NowButton {
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 32px rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
+      transition: opacity 0.3s ease;
       overflow: hidden;
-      transform: scale(1);
       opacity: 1;
       z-index: 1000;
     `;
@@ -111,7 +128,7 @@ export class NowButton {
         position: absolute;
         left: 50%;
         top: 50%;
-        font-size: ${this.currentSize / 8}px;
+        font-size: clamp(5px, 1.5vw, ${this.currentSize / 8}px);
         font-weight: bold;
         color: ${this.color};
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -134,14 +151,12 @@ export class NowButton {
 
   private updateArrowStyles(arrow: HTMLDivElement): void {
     arrow.style.cssText = `
-      width: ${this.currentSize * 0.3}px;
-      height: ${this.currentSize * 0.3}px;
+      width: clamp(12px, 4vw, ${this.currentSize * 0.3}px);
+      height: clamp(12px, 4vw, ${this.currentSize * 0.3}px);
       color: ${this.color};
       z-index: 1;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
       transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: scale(1);
-      opacity: 0.9;
     `;
   }
 
@@ -149,8 +164,6 @@ export class NowButton {
     if (onClick) {
       this.button.addEventListener('click', () => {
         onClick();
-        this.button.classList.toggle('panel-open');
-        document.getElementById('now-widget-host-content')?.classList.toggle('panel-open');
       });
     }
 
@@ -248,8 +261,7 @@ export class NowButton {
   }
 
   private updateStyles(isHovered: boolean) {
-    this.button.style.transform = isHovered ? 'scale(1.1)' : 'scale(1)';
-    this.arrowIcon.style.transform = isHovered ? 'scale(1.2)' : 'scale(1)';
+    this.buttonContent.style.transform = isHovered ? 'scale(1.1)' : 'scale(1)';
     this.arrowIcon.style.opacity = isHovered ? '1' : '0.9';
 
     Array.from(this.textContainer.children).forEach((child) => {
