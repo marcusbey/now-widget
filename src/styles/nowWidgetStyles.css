@@ -38,8 +38,8 @@
 /* Button Styles */
 #now-widget-button {
   position: fixed;
-  bottom: 80px;
-  left: 80px;
+  bottom: clamp(10px, 3vh, 20px);
+  left: clamp(10px, 3vw, 20px);
   width: var(--button-size);
   height: var(--button-size);
   border-radius: 50%;
@@ -49,6 +49,7 @@
   z-index: 10001;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 1;
+  pointer-events: auto;
 }
 
 #now-widget-button.panel-open {
@@ -61,6 +62,7 @@
 #now-widget-button.hidden {
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 
 /* Nested Element for Scaling */
@@ -71,6 +73,7 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
+  cursor: inherit;
 }
 
 #now-widget-button.hovered .button-content {
@@ -83,6 +86,7 @@
   position: relative;
   animation: spin 60s linear infinite;
   animation-direction: normal;
+  cursor: inherit;
 }
 
 .now-text {
@@ -90,6 +94,7 @@
   transform-origin: center;
   font-weight: bold;
   color: var(--theme-text);
+  cursor: inherit;
 }
 
 .fast-spin {
@@ -474,4 +479,33 @@ body.no-scroll {
   margin: 0;
   color: var(--theme-text);
   font-size: 0.875rem;
+}
+
+#now-widget-button::after {
+  content: "Click to open NowWidget";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+}
+
+#now-widget-button:hover::after {
+  opacity: 1;
+}
+
+/* Ensure Nested Elements Don’t Override Cursor */
+#now-widget-button .button-content,
+#now-widget-button .text-ring,
+#now-widget-button .now-text {
+  cursor: inherit;
 }

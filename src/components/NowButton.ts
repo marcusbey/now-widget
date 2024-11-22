@@ -20,6 +20,7 @@ export class NowButton {
   private color: string;
   private text = "NOW . NOW . NOW . ";
   private resizeObserver!: ResizeObserver;
+  private updateStylesDebounce: number | null = null;
 
   constructor(container: HTMLElement, options: NowButtonOptions = {}) {
     if (options.size) {
@@ -58,6 +59,7 @@ export class NowButton {
   private createButton(options: NowButtonOptions): HTMLButtonElement {
     const button = document.createElement('button');
     button.id = 'now-widget-button';
+    button.title = 'Click to open NowWidget';
     this.updateButtonStyles(button, options.backgroundColor);
     return button;
   }
@@ -261,14 +263,20 @@ export class NowButton {
   }
 
   private updateStyles(isHovered: boolean) {
-    this.buttonContent.style.transform = isHovered ? 'scale(1.1)' : 'scale(1)';
-    this.arrowIcon.style.opacity = isHovered ? '1' : '0.9';
+    if (this.updateStylesDebounce) {
+      clearTimeout(this.updateStylesDebounce);
+    }
 
-    Array.from(this.textContainer.children).forEach((child) => {
-      (child as HTMLElement).style.opacity = isHovered ? '0.8' : '1';
-    });
+    this.updateStylesDebounce = window.setTimeout(() => {
+      this.buttonContent.style.transform = isHovered ? 'scale(1.1)' : 'scale(1)';
+      this.arrowIcon.style.opacity = isHovered ? '1' : '0.9';
 
-    this.textContainer.style.animationDuration = `${this.animationDuration}s`;
+      Array.from(this.textContainer.children).forEach((child) => {
+        (child as HTMLElement).style.opacity = isHovered ? '0.8' : '1';
+      });
+
+      this.textContainer.style.animationDuration = `${this.animationDuration}s`;
+    }, 100); // Adjust the delay as needed for smoother transitions
   }
 }
 
